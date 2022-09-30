@@ -21,14 +21,14 @@ It becomes very handy when you have to keep track of a list of PLCs at work or c
 
 The buttons below loads the icon directly from the application path inserted in the settings tab.
 
-##Configuration tab:
+## Configuration tab:
 
 The following image shows an example of configuration with different applications and required parameters passed to them. 
 You can launch your specific application passing different arguments, for example the ip address of the device or username/password for the authentication process:
 
 ![alt text](https://github.com/Fedex1515/Client_PING/blob/master/Client_PING/Screenshots/Tab_3_Settings.PNG?raw=true)
 
-##Device tab:
+## Device tab:
 
  The device tab shows a summary of the selected device:
  
