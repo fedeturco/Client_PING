@@ -6,10 +6,10 @@ C#/WPF client useful to keep track of network devices, if they are online or not
 ### v1.0
 https://github.com/Fedex1515/Client_PING/releases/download/1.0/Client_PING_v1.0.zip
 
-### Manuale
+### Manual
 TODO
 
-# Example of configuration:
+# Info
 ## Homepage
 
 This application is useful to keep track of devices in your network at work or at home. You can import or insert a list of devices, keeping track of their pings.
