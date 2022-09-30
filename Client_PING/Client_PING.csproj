@@ -133,5 +133,14 @@
   <ItemGroup>
     <Resource Include="Magnifier.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Screenshots\Tab_1_Home.PNG" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Screenshots\Tab_2_Device.PNG" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Screenshots\Tab_3_Settings.PNG" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
