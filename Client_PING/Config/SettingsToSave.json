@@ -1,0 +1,61 @@
+{
+  "toSave": {
+    "textBoxes": {
+      "TextBoxPathBrowser": "",
+      "TextBoxPathBrowser_Arg0": "",
+      "TextBoxLabelApp1": "",
+      "TextBoxLabelApp2": "",
+      "TextBoxLabelApp3": "",
+      "TextBoxLabelApp4": "",
+      "TextBoxLabelApp5": "",
+      "TextBoxLabelApp6": "",
+      "TextBoxLabelApp7": "",
+      "TextBoxLabelApp8": "",
+      "TextBoxPathApp1": "",
+      "TextBoxPathApp2": "",
+      "TextBoxPathApp3": "",
+      "TextBoxPathApp4": "",
+      "TextBoxPathApp5": "",
+      "TextBoxPathApp6": "",
+      "TextBoxPathApp7": "",
+      "TextBoxPathApp8": "",
+      "TextBoxPathApp1_Arg0": "",
+      "TextBoxPathApp2_Arg0": "",
+      "TextBoxPathApp3_Arg0": "",
+      "TextBoxPathApp4_Arg0": "",
+      "TextBoxPathApp5_Arg0": "",
+      "TextBoxPathApp6_Arg0": "",
+      "TextBoxPathApp7_Arg0": "",
+      "TextBoxPathApp8_Arg0": "",
+      "TextBoxTimeout": "",
+      "TextBoxTimeoutLastPing": "",
+      "TextBoxDelayBetweenLoops": ""
+    },
+    "checkBoxes": {
+      "CheckBoxFixedPositionMainWindow": "",
+      "CheckBoxCloseConsoleAtStartup": "",
+      "CheckBoxPinWIndow": "",
+      "CheckBoxUseThreadsForPing": ""
+    },
+    "menuItems": {
+      "ViewStatusPing": "",
+      "ViewIpAddress": "",
+      "ViewDevice": "",
+      "ViewDescription": "",
+      "ViewGroup": "",
+      "ViewUser": "",
+      "ViewPass": "",
+      "ViewMacAddress": "",
+      "ViewNotes": "",
+      "ViewCustomArg1": "",
+      "ViewCustomArg2": "",
+      "ViewCustomArg3": "",
+      "ViewLastPing": ""
+    },
+    "radioButtons": {
+    },
+    "comboBoxes": {
+      "ComboBoxProfileSelected": ""
+    }
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "ip_addresses": [
+    {
+      "IpAddress": "192.168.1.1",
+      "Device": "Router",
+      "Description": "Router",
+      "Group": "Casa",
+      "User": "admin",
+      "Pass": "mypass",
+      "StatusPing": "OK - 0 ms",
+      "LastPing": "30/09/2022 22:24:52",
+      "MacAddress": null,
+      "Notes": null,
+      "CustomArg1": null,
+      "CustomArg2": null,
+      "CustomArg3": null,
+      "ColorPing": "#FF00FF00",
+      "ColorLastPing": "#FF00FF00"
+    },
+    {
+      "IpAddress": "192.168.1.2",
+      "Device": "Device 1",
+      "Description": null,
+      "Group": "Casa",
+      "User": "admin",
+      "Pass": "mypass",
+      "StatusPing": "Timeout",
+      "LastPing": "26/09/2022 21:43:38",
+      "MacAddress": null,
+      "Notes": null,
+      "CustomArg1": null,
+      "CustomArg2": null,
+      "CustomArg3": null,
+      "ColorPing": "#FFFF0000",
+      "ColorLastPing": "#FFFF0000"
+    },
+    {
+      "IpAddress": "192.168.1.3",
+      "Device": "Device 2",
+      "Description": null,
+      "Group": "Casa",
+      "User": "admin",
+      "Pass": "mypass",
+      "StatusPing": "Timeout",
+      "LastPing": "20/09/2022 22:16:44",
+      "MacAddress": null,
+      "Notes": null,
+      "CustomArg1": null,
+      "CustomArg2": null,
+      "CustomArg3": null,
+      "ColorPing": "#FFFF0000",
+      "ColorLastPing": "#FFFF0000"
+    }
+  ]
+}
