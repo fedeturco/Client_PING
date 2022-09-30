@@ -4,11 +4,12 @@ C#/WPF client useful to keep track of network devices, if they are online or not
 ## Release
 
 ### v1.0
+https://github.com/Fedex1515/Client_PING/releases/download/1.0/Client_PING_v1.0.zip
 
 ### Manuale
 TODO
 
-#Example of configuration:
+# Example of configuration:
 ## Homepage
 
 This application is useful to keep track of devices in your network at work or at home. You can import or insert a list of devices, keeping track of their pings.
@@ -17,6 +18,8 @@ launch your specific application on the target device, for example an ssh/ftp/sc
 It becomes very handy when you have to keep track of a list of PLCs at work or check the online status of different gateways in your LAN.
 
 ![alt text](https://github.com/Fedex1515/Client_PING/blob/master/Client_PING/Screenshots/Tab_1_Home.PNG?raw=true)
+
+The buttons below loads the icon directly from the application path inserted in the settings tab.
 
 ##Configuration tab:
 
