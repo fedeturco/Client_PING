@@ -97,14 +97,11 @@ namespace Client_PING
         public int timeoutLastPing = 0;
         public int delayBetweenLoops = 500;
 
+        public bool editedDescriptionOrNotes = false;
+
         public MainWindow()
         {
             InitializeComponent();
-        }
-
-        private void MenuItemSearch(object sender, RoutedEventArgs e)
-        {
-
         }
 
         private void WindowMenu_GuidaPDF_Click(object sender, RoutedEventArgs e)
@@ -190,11 +187,16 @@ namespace Client_PING
 
         public void saveConfiguration()
         {
+            // Salvo Width e Height della finestra
+            TextBoxWindowWidth.Text = this.Width.ToString();
+            TextBoxWindowHeight.Text = this.Height.ToString();
+            CheckBoxWindowMaximized.IsChecked = this.WindowState == WindowState.Maximized;
+
             // Save current session
             saveCurrentSession();
 
             // Save current profile content
-            if(ComboBoxProfileSelected.SelectedValue != null)
+            if (ComboBoxProfileSelected.SelectedValue != null)
                 saveProfile(ComboBoxProfileSelected.SelectedValue.ToString());
         }
 
@@ -431,6 +433,62 @@ namespace Client_PING
 
                         file_.Add("comboBoxes", comboBoxes);
                         break;
+
+                    case "columns":
+
+                        Dictionary<string, object> columns = new Dictionary<string, object>();
+
+                        foreach (KeyValuePair<string, object> sub in toSave["toSave"][row.Key])
+                        {
+                            // sub.key = "textBoxModbusAddess_1"
+                            // sub.value = { "..." }
+
+                            // debug
+                            //Console.WriteLine("sub.key: " + sub.Key);
+                            //Console.WriteLine("sub.value: " + sub.Value);
+
+                            bool found = false;
+
+                            foreach (KeyValuePair<string, object> prop in toSave["toSave"][row.Key][sub.Key])
+                            {
+                                // prop.key = "key"
+                                // prop.value = "nomeVariabile"
+
+                                // debug
+                                //Console.WriteLine("prop.key: " + prop.Key);
+                                //Console.WriteLine("prop.value: " + prop.Value as String);
+
+                                if (prop.Key == "key")
+                                {
+                                    found = true;
+
+                                    if (this.FindName(sub.Key) != null)
+                                    {
+                                        columns.Add(prop.Value as String, (this.FindName(sub.Key) as DataGridTextColumn).Width.Value);
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine(sub.Key + " not found in current form");
+                                    }
+                                }
+                            }
+
+                            if (!found)
+                            {
+                                if (this.FindName(sub.Key) != null)
+                                {
+                                    columns.Add(sub.Key, (this.FindName(sub.Key) as DataGridTextColumn).Width.Value);
+                                }
+                                else
+                                {
+                                    Console.WriteLine(sub.Key + " not found in current form");
+                                }
+                            }
+                        }
+
+
+                        file_.Add("columns", columns);
+                        break;
                 }
             }
 
@@ -474,6 +532,25 @@ namespace Client_PING
             if((bool)CheckBoxCloseConsoleAtStartup.IsChecked)
             {
                 chiudiConsole();
+            }
+
+            // Salvo Width,Height e WindowState della finestra
+            if ((bool)CheckBoxWindowMaximized.IsChecked)
+            {
+                this.WindowState = WindowState.Maximized;
+            }
+            else
+            {
+                int tmp_ = 0;
+
+                if (int.TryParse(TextBoxWindowWidth.Text, out tmp_))
+                {
+                    this.Width = tmp_;
+                }
+                if (int.TryParse(TextBoxWindowHeight.Text, out tmp_))
+                {
+                    this.Height = tmp_;
+                }
             }
         }
 
@@ -802,6 +879,67 @@ namespace Client_PING
                         }
 
                         break;
+
+                    case "columns":
+
+                        foreach (KeyValuePair<string, object> sub in toSave["toSave"][row.Key])
+                        {
+                            bool found = false;
+
+                            foreach (KeyValuePair<string, object> prop in toSave["toSave"][row.Key][sub.Key])
+                            {
+
+                                if (prop.Key == "key")
+                                {
+                                    found = true;
+
+                                    if (this.FindName(sub.Key) != null)
+                                    {
+                                        // debug
+                                        //Console.WriteLine(" -- ");
+                                        //Console.WriteLine("sub.Key: " + sub.Key);
+                                        //Console.WriteLine("prop.Value: " + prop.Value);
+                                        //Console.WriteLine(loaded[row.Key][prop.Value.ToString()]);
+
+                                        try
+                                        {
+                                            (this.FindName(sub.Key) as DataGridTextColumn).Width = (double)loaded[row.Key][prop.Value.ToString()];
+                                        }
+                                        catch (Exception err)
+                                        {
+                                            Console.WriteLine(prop.Value.ToString() + " generated an error");
+                                            Console.WriteLine(err);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine(sub.Key + " not found in current form");
+                                    }
+                                }
+                            }
+
+                            if (!found)
+                            {
+                                if (this.FindName(sub.Key) != null)
+                                {
+                                    try
+                                    {
+                                        (this.FindName(sub.Key) as DataGridTextColumn).Width = (double)loaded[row.Key][sub.Key.ToString()];
+                                    }
+                                    catch (Exception err)
+                                    {
+                                        Console.WriteLine(sub.Key.ToString() + " generated an error");
+                                        Console.WriteLine(err);
+                                    }
+                                }
+                                else
+                                {
+                                    Console.WriteLine(sub.Key + " not found in current form");
+                                }
+                            }
+                        }
+
+                        break;
                 }
             }
         }
@@ -842,20 +980,23 @@ namespace Client_PING
         {
             try
             {
-                Process p = new Process();
-
-                p.StartInfo = new ProcessStartInfo()
+                if (selected != null)
                 {
-                    WorkingDirectory = Directory.GetCurrentDirectory(),
-                    FileName = "ping",
-                    Arguments = "-t " + TextBoxIpAddress.Text.ToString() + " -w " + timeoutPing.ToString(),
-                    UseShellExecute = true,
-                    RedirectStandardOutput = false,
-                    RedirectStandardError = false,
-                    CreateNoWindow = false
-                };
+                    Process p = new Process();
 
-                p.Start();
+                    p.StartInfo = new ProcessStartInfo()
+                    {
+                        WorkingDirectory = Directory.GetCurrentDirectory(),
+                        FileName = "ping",
+                        Arguments = "-t " + selected.IpAddress + " -w " + timeoutPing.ToString(),
+                        UseShellExecute = true,
+                        RedirectStandardOutput = false,
+                        RedirectStandardError = false,
+                        CreateNoWindow = false
+                    };
+
+                    p.Start();
+                }
             }
             catch (Exception error)
             {
@@ -962,8 +1103,8 @@ namespace Client_PING
             {
                 stopPing = true;
 
-                // ButtonLoop.IsEnabled = false;
-                // ButtonLoopSingle.IsEnabled = false;
+                ButtonLoop.IsEnabled = false;
+                ButtonLoopSingle.IsEnabled = false;
                 // CheckBoxUseThreadsForPing.IsEnabled = false;
                 // ComboBoxProfileSelected.IsEnabled = true;
             }
@@ -1063,8 +1204,21 @@ namespace Client_PING
                     }
                 }
 
-                if(useThreadsForPing)
-                    Thread.Sleep(3 * timeoutPing + 500);
+                if (useThreadsForPing)
+                {
+                    // Thread.Sleep(3 * timeoutPing + 500);
+
+                    int wait = 3 * timeoutPing + 500;
+                    
+                    for(int i = 0; i < (int)wait/100; i++)
+                    {
+                        Thread.Sleep(100);
+
+                        if(i * 100 * 2 > timeoutPing)
+                            if (stopPing)
+                                return;
+                    }
+                }
             }
             catch (Exception err)
             {
@@ -1203,15 +1357,23 @@ namespace Client_PING
                     if (selected.Notes != null)
                     {
                         RichTextBoxNotes.Document.Blocks.Clear();
-                        RichTextBoxNotes.AppendText("\n");
+                        //RichTextBoxNotes.AppendText("\n");
                         RichTextBoxNotes.AppendText(selected.Notes);
+                    }
+                    else
+                    {
+                        RichTextBoxNotes.Document.Blocks.Clear();
                     }
 
                     if (selected.Description != null)
                     {
                         RichTextBoxDescription.Document.Blocks.Clear();
-                        RichTextBoxDescription.AppendText("\n");
+                        //RichTextBoxDescription.AppendText("\n");
                         RichTextBoxDescription.AppendText(selected.Description);
+                    }
+                    else
+                    {
+                        RichTextBoxDescription.Document.Blocks.Clear();
                     }
 
                     enableButtons(true);
@@ -1417,15 +1579,56 @@ namespace Client_PING
             {
                 if(e.Key == Key.P)
                 {
-                    ButtonLoopSingle_Click(null, null);
+                    ButtonPing_Main_Click(null, null);
                 }
 
-                if(e.Key == Key.L)
+                if (e.Key == Key.K)
+                {
+                    ButtonLoopSingle_Click(null, null);
+                }
+                if (e.Key == Key.L)
                 {
                     ButtonLoop_Click(null, null);
                 }
 
-                if(e.Key == Key.I)
+                if (e.Key == Key.W)
+                {
+                    ButtonWeb0_Main_Click(null, null);
+                }
+                if (e.Key == Key.D1)
+                {
+                    ButtonWeb1_Main_Click(null, null);
+                }
+                if (e.Key == Key.D2)
+                {
+                    ButtonWeb2_Main_Click(null, null);
+                }
+                if (e.Key == Key.D3)
+                {
+                    ButtonWeb3_Main_Click(null, null);
+                }
+                if (e.Key == Key.D4)
+                {
+                    ButtonWeb4_Main_Click(null, null);
+                }
+                if (e.Key == Key.D5)
+                {
+                    ButtonWeb5_Main_Click(null, null);
+                }
+                if (e.Key == Key.D6)
+                {
+                    ButtonWeb6_Main_Click(null, null);
+                }
+                if (e.Key == Key.D7)
+                {
+                    ButtonWeb7_Main_Click(null, null);
+                }
+                if (e.Key == Key.D8)
+                {
+                    ButtonWeb8_Main_Click(null, null);
+                }
+
+                if (e.Key == Key.I)
                 {
                     WindowMenu_Info_Click(null, null);
                 }
@@ -1453,7 +1656,6 @@ namespace Client_PING
                         if (!consoleIsOpen)
                         {
                             apriConsole();
-
                             this.Focus();
                         }
                         else
@@ -1935,6 +2137,73 @@ namespace Client_PING
             }
             catch
             {
+            }
+        }
+
+        private void ButtonExportProfile_Click(object sender, RoutedEventArgs e)
+        {
+            ExportProfile exportProfile = new ExportProfile(this);
+            exportProfile.Show();
+        }
+
+        private void RichTextBoxDescription_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if(TabControlGenerale.SelectedIndex == 1)
+            {
+                if (selected != null)
+                {
+                    TextRange tr = new TextRange(RichTextBoxDescription.Document.ContentStart, RichTextBoxDescription.Document.ContentEnd);
+                    selected.Description = tr.Text.Substring(0, tr.Text.Length - 2); ;
+
+                    editedDescriptionOrNotes = true;
+                }
+            }
+        }
+
+        private void RichTextBoxNotes_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (TabControlGenerale.SelectedIndex == 1)
+            {
+                if (selected != null)
+                {
+                    TextRange tr = new TextRange(RichTextBoxNotes.Document.ContentStart, RichTextBoxNotes.Document.ContentEnd);
+                    selected.Notes = tr.Text.Substring(0, tr.Text.Length - 2);
+
+                    editedDescriptionOrNotes = true;
+                }
+            }
+        }
+
+        private void ViewResetColumnWidth_Click(object sender, RoutedEventArgs e)
+        {
+            ColumnStatusPing.Width = 100;
+            ColumnIpAddress.Width = 100;
+            ColumnDevice.Width = 100;
+            ColumnDescription.Width = 100;
+            ColumnGroup.Width = 100;
+            ColumnUser.Width = 100;
+            ColumnPass.Width = 100;
+            ColumnMacAddress.Width = 100;
+            ColumnNotes.Width = 100;
+            ColumnCustomArg1.Width = 100;
+            ColumnCustomArg2.Width = 100;
+            ColumnCustomArg3.Width = 100;
+            ColumnLastPing.Width = 160;
+        }
+
+        private void TabControlGenerale_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            switch (TabControlGenerale.SelectedIndex)
+            {
+                case 0:
+                    if (editedDescriptionOrNotes)
+                    {
+                        editedDescriptionOrNotes = false;
+
+                        DataGridListaIp.ItemsSource = null;
+                        DataGridListaIp.ItemsSource = ListDevices;
+                    }
+                    break;
             }
         }
     }

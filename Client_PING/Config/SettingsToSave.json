@@ -29,13 +29,17 @@
       "TextBoxPathApp8_Arg0": "",
       "TextBoxTimeout": "",
       "TextBoxTimeoutLastPing": "",
-      "TextBoxDelayBetweenLoops": ""
+      "TextBoxDelayBetweenLoops": "",
+      "TextBoxExportProfile": "",
+      "TextBoxWindowWidth": "",
+      "TextBoxWindowHeight": ""
     },
     "checkBoxes": {
       "CheckBoxFixedPositionMainWindow": "",
       "CheckBoxCloseConsoleAtStartup": "",
       "CheckBoxPinWIndow": "",
-      "CheckBoxUseThreadsForPing": ""
+      "CheckBoxUseThreadsForPing": "",
+      "CheckBoxWindowMaximized": ""
     },
     "menuItems": {
       "ViewStatusPing": "",
@@ -56,6 +60,21 @@
     },
     "comboBoxes": {
       "ComboBoxProfileSelected": ""
+    },
+    "columns": {
+      "ColumnStatusPing": "",
+      "ColumnIpAddress": "",
+      "ColumnDevice": "",
+      "ColumnDescription": "",
+      "ColumnGroup": "",
+      "ColumnUser": "",
+      "ColumnPass": "",
+      "ColumnMacAddress": "",
+      "ColumnNotes": "",
+      "ColumnCustomArg1": "",
+      "ColumnCustomArg2": "",
+      "ColumnCustomArg3": "",
+      "ColumnLastPing": ""
     }
   }
 }

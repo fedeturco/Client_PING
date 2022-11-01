@@ -216,6 +216,30 @@
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator></Separator>
+                    <MenuItem Header="Export csv/txt" Click="ButtonExportProfile_Click">
+                        <MenuItem.Icon>
+                            <Viewbox Width="16" Height="16" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+                                <Rectangle Width="16" Height="16">
+                                    <Rectangle.Fill>
+                                        <DrawingBrush>
+                                            <DrawingBrush.Drawing>
+                                                <DrawingGroup>
+                                                    <DrawingGroup.Children>
+                                                        <GeometryDrawing Brush="#00FFFFFF" Geometry="F1M16,16L0,16 0,0 16,0z" />
+                                                        <GeometryDrawing Brush="#FFF6F6F6" Geometry="F1M14,4.5557L14,12.9997C14,13.9697,13.299,14.9997,12,14.9997L4,14.9997C3.03,14.9997,2,14.2987,2,12.9997L2,7.9997 0.586,7.9997 2,6.5857 2,5.9997 0,5.9997 0,1.9997 2.258,1.9997C2.297,1.9297,2.333,1.8567,2.379,1.7937L0.586,-0.000300000000000189 5.414,-0.000300000000000189 6.414,0.9997 10.061,0.9997z" />
+                                                        <GeometryDrawing Brush="#FFEFEFF0" Geometry="F1M8.4141,3L9.0001,3 9.0001,3.586z M11.0001,10L5.0001,10 5.0001,9 11.0001,9z M11.0001,12L5.0001,12 5.0001,11 11.0001,11z M9.0001,6L9.0001,4.414 8.0001,5.414 8.0001,6 7.4141,6 6.4141,7 11.0001,7 11.0001,8 5.4141,8 5.0001,8 4.0001,8 4.0001,13 12.0001,13 12.0001,6z" />
+                                                        <GeometryDrawing Brush="#FF424242" Geometry="F1M6.4141,7L5.4141,8 11.0001,8 11.0001,7z M7.4141,6L8.0001,6 8.0001,5.414z M9.6411,2L7.4141,2 8.4141,3 9.0001,3 9.0001,3.586 9.4141,4 9.0001,4.414 9.0001,6 12.0001,6 12.0001,13 4.0001,13 4.0001,8 3.0001,8 3.0001,13C3.0001,14,3.9641,14,3.9641,14L11.9651,14C12.9651,14,13.0001,13,13.0001,13L13.0001,5z M5.0001,12L11.0001,12 11.0001,11 5.0001,11z M5.0001,9L11.0001,9 11.0001,10 5.0001,10z" />
+                                                        <GeometryDrawing Brush="#FF00529C" Geometry="F1M8,4L5,7 3,7 5,5 1,5 1,3 5,3 3,1 5,1z" />
+                                                    </DrawingGroup.Children>
+                                                </DrawingGroup>
+                                            </DrawingBrush.Drawing>
+                                        </DrawingBrush>
+                                    </Rectangle.Fill>
+                                </Rectangle>
+                            </Viewbox>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <Separator></Separator>
                     <MenuItem Header="Open profile folder" Click="ButtonOpenProfileFolder_Click">
                         <MenuItem.Icon>
                             <Viewbox Width="16 " Height="16" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:System="clr-namespace:System;assembly=mscorlib">
@@ -262,6 +286,7 @@
                     <MenuItem x:Name="ViewCustomArg2" Header="CustomArg2" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" IsChecked="True"></MenuItem>
                     <MenuItem x:Name="ViewCustomArg3" Header="CustomArg3" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" IsChecked="True"></MenuItem>
                     <MenuItem x:Name="ViewLastPing" Header="LastPing" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" IsChecked="True"></MenuItem>
+                    <MenuItem x:Name="ViewResetColumnWidth" Header="Reset Columns Width" Click="ViewResetColumnWidth_Click"></MenuItem>
                 </MenuItem>
                 <MenuItem Header="_Info" FontSize="16">
                     <MenuItem x:Name="WindowMenu_GuidaPDF"  Header="Manual" Click="WindowMenu_GuidaPDF_Click">
@@ -312,7 +337,7 @@
         </DockPanel>
         <Label Content="Profile:" HorizontalAlignment="Right" Margin="0,12,348,0" VerticalAlignment="Top" FontSize="16" Grid.RowSpan="2"/>
         <ComboBox x:Name="ComboBoxProfileSelected" HorizontalAlignment="Right" Margin="0,14,49,0" VerticalAlignment="Top" Width="294" FontSize="16" SelectionChanged="ComboBoxProfileSelected_SelectionChanged" Grid.RowSpan="2"/>
-        <TabControl x:Name="TabControlGenerale" Margin="10,5,9,10" Grid.Row="1" >
+        <TabControl x:Name="TabControlGenerale" Margin="10,5,9,10" Grid.Row="1" SelectionChanged="TabControlGenerale_SelectionChanged" >
             <TabItem Header="Device List" FontSize="14">
                 <Grid Background="#FFE5E5E5">
                     <DataGrid x:Name="DataGridListaIp" Margin="10,10,10,65" AutoGenerateColumns="False" SelectionChanged="DataGridListaIp_SelectionChanged" SelectionMode="Single" FontSize="14" FrozenColumnCount = "2" IsTextSearchEnabled="True" TextSearch.TextPath="PuntoVendita">
@@ -345,13 +370,13 @@
                         </DataGrid.Columns>
                     </DataGrid>
                     <CheckBox x:Name="CheckBoxPinWIndow" Content="Pin Window" Margin="126,0,0,35" Checked="CheckBoxPinWIndow_Checked" Unchecked="CheckBoxPinWIndow_Checked" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="98" FontSize="14"/>
-                    <Button x:Name="ButtonWeb1_Main" HorizontalAlignment="Right" Margin="0,0,265,35" VerticalAlignment="Bottom" Width="80" Click="ButtonWeb1_Main_Click" IsCancel="True">
+                    <Button x:Name="ButtonWeb1_Main" HorizontalAlignment="Right" Margin="0,0,265,35" VerticalAlignment="Bottom" Width="80" Click="ButtonWeb1_Main_Click" IsCancel="True" ToolTip="Ctrl+1">
                         <StackPanel Orientation="Horizontal">
                             <Image x:Name="ButtonWeb1_Main_Image" Margin="0,0,5,0" Width="15" Height="15" Stretch="None"/>
                             <TextBlock x:Name="ButtonWeb1_Main_Text" Text="App1"></TextBlock>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="ButtonWeb0_Main" HorizontalAlignment="Right" Margin="0,0,350,35" VerticalAlignment="Bottom" Width="80" Click="ButtonWeb0_Main_Click">
+                    <Button x:Name="ButtonWeb0_Main" HorizontalAlignment="Right" Margin="0,0,350,35" VerticalAlignment="Bottom" Width="80" Click="ButtonWeb0_Main_Click" ToolTip="Ctrl+W">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Width="16 " Height="16" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:System="clr-namespace:System;assembly=mscorlib">
                                 <Rectangle Width="16 " Height="16">
@@ -390,7 +415,7 @@
                             <TextBlock Margin="5,0,0,0" Text="Web"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="ButtonLoop" HorizontalAlignment="Left" Margin="10,0,0,6.714" VerticalAlignment="Bottom" Width="90" Click="ButtonLoop_Click">
+                    <Button x:Name="ButtonLoop" HorizontalAlignment="Left" Margin="10,0,0,6.714" VerticalAlignment="Bottom" Width="90" Click="ButtonLoop_Click" ToolTip="Ctrl+L">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Width="16 " Height="16" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:System="clr-namespace:System;assembly=mscorlib">
                                 <Rectangle Width="16 " Height="16">
@@ -420,7 +445,7 @@
                     <Border x:Name="BorderLoopRunning" Background="LightGray" Margin="201,0,0,6.714" Height="23" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="23">
                         <Image Stretch="Fill" Margin="86,120,660,175" />
                     </Border>
-                    <Button x:Name="ButtonLoopSingle" HorizontalAlignment="Left" Margin="106,0,0,6.714" VerticalAlignment="Bottom" Width="90" Click="ButtonLoopSingle_Click">
+                    <Button x:Name="ButtonLoopSingle" HorizontalAlignment="Left" Margin="106,0,0,6.714" VerticalAlignment="Bottom" Width="90" Click="ButtonLoopSingle_Click" ToolTip="Ctrl+K">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Width="16 " Height="16" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:System="clr-namespace:System;assembly=mscorlib">
                                 <Rectangle Width="16 " Height="16">
@@ -449,7 +474,7 @@
                             <TextBlock Text="Check" Margin="5,0,0,0"/>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="ButtonPing_Main" HorizontalAlignment="Right" Margin="0,0,350,7" VerticalAlignment="Bottom" Width="80" Click="ButtonPing_Main_Click">
+                    <Button x:Name="ButtonPing_Main" HorizontalAlignment="Right" Margin="0,0,350,7" VerticalAlignment="Bottom" Width="80" Click="ButtonPing_Main_Click" ToolTip="Ctrl+P">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Width="16 " Height="16" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:System="clr-namespace:System;assembly=mscorlib">
                                 <Rectangle Width="16 " Height="16">
@@ -489,35 +514,35 @@
                         </StackPanel>
                     </Button>
 
-                    <Button x:Name="ButtonWeb2_Main" HorizontalAlignment="Right" Margin="0,0,180,35" VerticalAlignment="Bottom" Width="80" Click="ButtonWeb2_Main_Click">
+                    <Button x:Name="ButtonWeb2_Main" HorizontalAlignment="Right" Margin="0,0,180,35" VerticalAlignment="Bottom" Width="80" Click="ButtonWeb2_Main_Click" ToolTip="Ctrl+2">
                         <StackPanel Orientation="Horizontal">
                             <Image x:Name="ButtonWeb2_Main_Image" Margin="0,0,5,0" Width="15" Height="15" Stretch="None"/>
                             <TextBlock x:Name="ButtonWeb2_Main_Text" Text="App2"></TextBlock>
                         </StackPanel>
                     </Button>
 
-                    <Button x:Name="ButtonWeb3_Main" HorizontalAlignment="Right" Margin="0,0,95,35" VerticalAlignment="Bottom" Width="80" Click="ButtonWeb3_Main_Click" Height="23">
+                    <Button x:Name="ButtonWeb3_Main" HorizontalAlignment="Right" Margin="0,0,95,35" VerticalAlignment="Bottom" Width="80" Click="ButtonWeb3_Main_Click" Height="23" ToolTip="Ctrl+3">
                         <StackPanel Orientation="Horizontal">
                             <Image x:Name="ButtonWeb3_Main_Image" Margin="0,0,5,0" Width="15" Height="15" Stretch="None"/>
                             <TextBlock x:Name="ButtonWeb3_Main_Text" Text="App3"></TextBlock>
                         </StackPanel>
                     </Button>
 
-                    <Button x:Name="ButtonWeb4_Main" HorizontalAlignment="Right" Margin="0,0,10,35" VerticalAlignment="Bottom" Width="80" IsCancel="True" Click="ButtonWeb4_Main_Click">
+                    <Button x:Name="ButtonWeb4_Main" HorizontalAlignment="Right" Margin="0,0,10,35" VerticalAlignment="Bottom" Width="80" IsCancel="True" Click="ButtonWeb4_Main_Click" ToolTip="Ctrl+4">
                         <StackPanel Orientation="Horizontal">
                             <Image x:Name="ButtonWeb4_Main_Image" Margin="0,0,5,0" Width="15" Height="15" Stretch="None"/>
                             <TextBlock x:Name="ButtonWeb4_Main_Text" Text="App4"></TextBlock>
                         </StackPanel>
                     </Button>
 
-                    <Button x:Name="ButtonWeb5_Main" HorizontalAlignment="Right" Margin="0,0,265,7" VerticalAlignment="Bottom" Width="80" Click="ButtonWeb5_Main_Click">
+                    <Button x:Name="ButtonWeb5_Main" HorizontalAlignment="Right" Margin="0,0,265,7" VerticalAlignment="Bottom" Width="80" Click="ButtonWeb5_Main_Click" ToolTip="Ctrl+5">
                         <StackPanel Orientation="Horizontal">
                             <Image x:Name="ButtonWeb5_Main_Image" Margin="0,0,5,0" Width="15" Height="15" Stretch="None"/>
                             <TextBlock x:Name="ButtonWeb5_Main_Text" Text="App5"></TextBlock>
                         </StackPanel>
                     </Button>
 
-                    <Button x:Name="ButtonWeb6_Main" HorizontalAlignment="Right" Margin="0,0,180,7" VerticalAlignment="Bottom" Width="80" Click="ButtonWeb6_Main_Click">
+                    <Button x:Name="ButtonWeb6_Main" HorizontalAlignment="Right" Margin="0,0,180,7" VerticalAlignment="Bottom" Width="80" Click="ButtonWeb6_Main_Click" ToolTip="Ctrl+6">
                         <StackPanel Orientation="Horizontal">
                             <Image x:Name="ButtonWeb6_Main_Image" Margin="0,0,5,0" Width="15" Height="15" Stretch="None"/>
                             <TextBlock x:Name="ButtonWeb6_Main_Text" Text="App6"></TextBlock>
@@ -526,13 +551,13 @@
 
                     <Label x:Name="LabelCurrentIp" Content="" Margin="229,0,435,4" VerticalAlignment="Bottom"/>
                     <CheckBox x:Name="CheckBoxUseThreadsForPing" Content="Parallel pings" HorizontalAlignment="Left" Margin="10,0,0,37" VerticalAlignment="Bottom" Checked="CheckBoxUseThreadsForPing_Checked" Unchecked="CheckBoxUseThreadsForPing_Checked"/>
-                    <Button x:Name="ButtonWeb7_Main" HorizontalAlignment="Right" Margin="0,0,95,7" VerticalAlignment="Bottom" Width="80" Click="ButtonWeb7_Main_Click">
+                    <Button x:Name="ButtonWeb7_Main" HorizontalAlignment="Right" Margin="0,0,95,7" VerticalAlignment="Bottom" Width="80" Click="ButtonWeb7_Main_Click" ToolTip="Ctrl+7">
                         <StackPanel Orientation="Horizontal">
                             <Image x:Name="ButtonWeb7_Main_Image" Margin="0,0,5,0" Width="15" Height="15" Stretch="None"/>
                             <TextBlock x:Name="ButtonWeb7_Main_Text"><Run Text="App"/><Run Text="7"/></TextBlock>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="ButtonWeb8_Main" HorizontalAlignment="Right" Margin="0,0,10,7" VerticalAlignment="Bottom" Width="80" Click="ButtonWeb8_Main_Click">
+                    <Button x:Name="ButtonWeb8_Main" HorizontalAlignment="Right" Margin="0,0,10,7" VerticalAlignment="Bottom" Width="80" Click="ButtonWeb8_Main_Click" ToolTip="Ctrl+8">
                         <StackPanel Orientation="Horizontal">
                             <Image x:Name="ButtonWeb8_Main_Image" Margin="0,0,5,0" Width="15" Height="15" Stretch="None"/>
                             <TextBlock x:Name="ButtonWeb8_Main_Text"><Run Text="App"/><Run Text="8"/></TextBlock>
@@ -635,18 +660,18 @@
                             <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.WindowColorKey}}"/>
                         </Label.Background>
                     </Label>
-                    <Label Content="CUSTOM ARG 1" HorizontalAlignment="Left" Margin="15,141,0,0" VerticalAlignment="Top" FontSize="14" Width="141">
+                    <Label Content="CUSTOM ARG 1" HorizontalAlignment="Left" Margin="15,141,0,0" VerticalAlignment="Top" FontSize="14" Width="141" Visibility="Hidden">
                         <Label.Background>
                             <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.WindowColorKey}}"/>
                         </Label.Background>
                     </Label>
-                    <Label Content="CUSTOM ARG 2" HorizontalAlignment="Left" Margin="15,175,0,0" VerticalAlignment="Top" FontSize="14" Width="141">
+                    <Label Content="CUSTOM ARG 2" HorizontalAlignment="Left" Margin="15,175,0,0" VerticalAlignment="Top" FontSize="14" Width="141" Visibility="Hidden">
                         <Label.Background>
                             <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.WindowColorKey}}"/>
                         </Label.Background>
                     </Label>
-                    <TextBox x:Name="TextBoxCustomLink1" HorizontalAlignment="Left" Height="29" Margin="164,141,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="161" IsReadOnly="True"/>
-                    <TextBox x:Name="TextBoxCustomLink2" HorizontalAlignment="Left" Height="29" Margin="164,175,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="161" IsReadOnly="True"/>
+                    <TextBox x:Name="TextBoxCustomLink1" HorizontalAlignment="Left" Height="29" Margin="164,141,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="161" IsReadOnly="True" Visibility="Hidden"/>
+                    <TextBox x:Name="TextBoxCustomLink2" HorizontalAlignment="Left" Height="29" Margin="164,175,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="161" IsReadOnly="True" Visibility="Hidden"/>
                     <Button x:Name="ButtonWeb0" HorizontalAlignment="Left" Margin="363,73,0,0" VerticalAlignment="Top" Width="68" Click="ButtonWeb0_Main_Click" Height="29">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox Width="16 " Height="16" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:System="clr-namespace:System;assembly=mscorlib">
@@ -686,13 +711,13 @@
                             <TextBlock Text="Web" Margin="5,0,0,0"></TextBlock>
                         </StackPanel>
                     </Button>
-                    <Label Content="CUSTOM ARG 3" HorizontalAlignment="Left" Margin="15,209,0,0" VerticalAlignment="Top" FontSize="14" Width="141">
+                    <Label Content="CUSTOM ARG 3" HorizontalAlignment="Left" Margin="15,209,0,0" VerticalAlignment="Top" FontSize="14" Width="141" Visibility="Hidden">
                         <Label.Background>
                             <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.WindowColorKey}}"/>
                         </Label.Background>
                     </Label>
-                    <TextBox x:Name="TextBoxCustomLink3" HorizontalAlignment="Left" Height="29" Margin="164,209,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="161" IsReadOnly="True"/>
-                    <Button x:Name="ButtonCopyWeb1" Margin="330,141,0,0" HorizontalAlignment="Left" Width="28" Height="29" VerticalAlignment="Top" Click="ButtonCopyWeb1_Click">
+                    <TextBox x:Name="TextBoxCustomLink3" HorizontalAlignment="Left" Height="29" Margin="164,209,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="161" IsReadOnly="True" Visibility="Hidden"/>
+                    <Button x:Name="ButtonCopyWeb1" Margin="330,141,0,0" HorizontalAlignment="Left" Width="28" Height="29" VerticalAlignment="Top" Click="ButtonCopyWeb1_Click" Visibility="Hidden">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Width="16" Height="16">
                                 <Rectangle Width="16" Height="16">
@@ -712,7 +737,7 @@
                             </Viewbox>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="ButtonCopyWeb2" Margin="330,175,0,0" HorizontalAlignment="Left" Width="28" Height="29" VerticalAlignment="Top" Click="ButtonCopyWeb2_Click">
+                    <Button x:Name="ButtonCopyWeb2" Margin="330,175,0,0" HorizontalAlignment="Left" Width="28" Height="29" VerticalAlignment="Top" Click="ButtonCopyWeb2_Click" Visibility="Hidden">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Width="16" Height="16">
                                 <Rectangle Width="16" Height="16">
@@ -732,7 +757,7 @@
                             </Viewbox>
                         </StackPanel>
                     </Button>
-                    <Button x:Name="ButtonCopyWeb3" Margin="330,209,0,0" HorizontalAlignment="Left" Width="28" Height="29" VerticalAlignment="Top" Click="ButtonCopyWeb3_Click">
+                    <Button x:Name="ButtonCopyWeb3" Margin="330,209,0,0" HorizontalAlignment="Left" Width="28" Height="29" VerticalAlignment="Top" Click="ButtonCopyWeb3_Click" Visibility="Hidden">
                         <StackPanel Orientation="Horizontal">
                             <Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Width="16" Height="16">
                                 <Rectangle Width="16" Height="16">
@@ -752,12 +777,12 @@
                             </Viewbox>
                         </StackPanel>
                     </Button>
-                    <Label Content="NOTES:" HorizontalAlignment="Left" Margin="15,243,0,0" VerticalAlignment="Top" FontSize="14" Background="White"/>
-                    <RichTextBox x:Name="RichTextBoxNotes" Margin="15,277,10,10" IsReadOnly="True">
+                    <Label Content="NOTES:" HorizontalAlignment="Left" Margin="15,277,0,0" VerticalAlignment="Top" FontSize="14" Background="White"/>
+                    <RichTextBox x:Name="RichTextBoxNotes" Margin="15,311,10,10" IsReadOnly="False" TextChanged="RichTextBoxNotes_TextChanged" Block.LineHeight="1">
                         <FlowDocument/>
                     </RichTextBox>
-                    <Label Content="DESCRIPTION:" HorizontalAlignment="Left" Margin="363,141,0,0" VerticalAlignment="Top" FontSize="14" Background="White"/>
-                    <RichTextBox x:Name="RichTextBoxDescription" Margin="363,175,10,0" IsReadOnly="True" Height="97" VerticalAlignment="Top">
+                    <Label Content="DESCRIPTION:" HorizontalAlignment="Left" Margin="15,141,0,0" VerticalAlignment="Top" FontSize="14" Background="White" Width="141"/>
+                    <RichTextBox x:Name="RichTextBoxDescription" Margin="15,175,10,0" IsReadOnly="False" Height="97" VerticalAlignment="Top" TextChanged="RichTextBoxDescription_TextChanged" Block.LineHeight="1">
                         <FlowDocument/>
                     </RichTextBox>
                 </Grid>
@@ -817,6 +842,10 @@
                     <TextBox x:Name="TextBoxPathApp8" Height="23" Margin="170,346,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" HorizontalAlignment="Left" Width="398" TextChanged="TextBoxPathApp8_TextChanged"/>
                     <TextBox x:Name="TextBoxPathApp8_Arg0" Height="23" Margin="573,346,41,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14"/>
                     <TextBox x:Name="TextBoxLabelApp8" HorizontalAlignment="Left" Height="23" Margin="65,346,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" TextChanged="TextBoxLabelApp8_TextChanged" Text="App8"/>
+                    <TextBox x:Name="TextBoxExportProfile" HorizontalAlignment="Left" Height="23" Margin="165,380,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="607" Visibility="Hidden"/>
+                    <TextBox x:Name="TextBoxWindowWidth" Margin="0" Visibility="Hidden"/>
+                    <TextBox x:Name="TextBoxWindowHeight" Margin="0" Visibility="Hidden"/>
+                    <CheckBox x:Name="CheckBoxWindowMaximized" Margin="0"  Visibility="Hidden"/>
                 </Grid>
             </TabItem>
         </TabControl>
