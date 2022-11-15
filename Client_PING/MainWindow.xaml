@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client_PING"
         mc:Ignorable="d"
-        Title="MainWindow" Height="553.975" Width="846" Loaded="Window_Loaded" Closing="Window_Closing" KeyUp="Window_KeyUp" MinWidth="674" MinHeight="400">
+        Title="MainWindow" Height="785.975" Width="846" Loaded="Window_Loaded" Closing="Window_Closing" KeyUp="Window_KeyUp" MinWidth="674" MinHeight="400" KeyDown="Window_KeyDown">
     <Grid>
         <DockPanel>
             <Menu DockPanel.Dock="Top" x:Name="MenuBar" Background="{x:Null}">
@@ -787,6 +787,78 @@
                     </RichTextBox>
                 </Grid>
             </TabItem>
+            <TabItem Header="Script" FontSize="14">
+                <Grid Background="#FFE5E5E5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="2*"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="2*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <RichTextBox x:Name="RichTextBoxStartScript" Margin="10,42,10,10" Block.LineHeight="1">
+                        <FlowDocument/>
+                    </RichTextBox>
+                    <RichTextBox x:Name="RichTextBoxStartOutput" Margin="10" Grid.Row="1" Block.LineHeight="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" FontFamily="Consolas" Background="#FF353535" Foreground="#FFFAFAFA" IsReadOnly="True" FontSize="14">
+                        <FlowDocument/>
+                    </RichTextBox>
+                    <RichTextBox x:Name="RichTextBoxStopOutput" Margin="10" Grid.Row="3" Block.LineHeight="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" FontFamily="Consolas" Background="#FF353535" Foreground="#FFFAFAFA" IsReadOnly="True" FontSize="14">
+                        <FlowDocument/>
+                    </RichTextBox>
+                    <RichTextBox x:Name="RichTextBoxStopScript" Margin="10,42,10,10" Grid.Row="2" Block.LineHeight="1">
+                        <FlowDocument>
+                            <Paragraph/>
+                        </FlowDocument>
+                    </RichTextBox>
+                    <Button x:Name="ButtonRunStartScript" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="60" Click="ButtonRunStartScript_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <Viewbox Width="16" Height="16" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+                                <Rectangle Width="16" Height="16">
+                                    <Rectangle.Fill>
+                                        <DrawingBrush>
+                                            <DrawingBrush.Drawing>
+                                                <DrawingGroup>
+                                                    <DrawingGroup.Children>
+                                                        <GeometryDrawing Brush="#00FFFFFF" Geometry="F1M16,16L0,16 0,0 16,0z" />
+                                                        <GeometryDrawing Brush="#FFF6F6F6" Geometry="F1M2.9997,-0.000199999999999534L2.9997,15.9998 13.6677,7.9998z" />
+                                                        <GeometryDrawing x:Name="IconPlay" Brush="#FF00F000" Geometry="F1M4,2L4,14 12,8z" />
+                                                    </DrawingGroup.Children>
+                                                </DrawingGroup>
+                                            </DrawingBrush.Drawing>
+                                        </DrawingBrush>
+                                    </Rectangle.Fill>
+                                </Rectangle>
+                            </Viewbox>
+                            <TextBlock Text="Run" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="ButtonRunStopScript" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="60" Grid.Row="2" Click="ButtonRunStopScript_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <Viewbox xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Width="16" Height="16">
+                                <Rectangle Width="16" Height="16">
+                                    <Rectangle.Fill>
+                                        <DrawingBrush>
+                                            <DrawingBrush.Drawing>
+                                                <DrawingGroup>
+                                                    <GeometryDrawing Brush="#00FFFFFF" Geometry="F1M16,16L0,16 0,0 16,0z" />
+                                                    <GeometryDrawing Brush="#FFF6F6F6" Geometry="F1M2.9997,-0.000199999999999534L2.9997,15.9998 13.6677,7.9998z" />
+                                                    <GeometryDrawing x:Name="IconPlay1" Brush="#FF00F000" Geometry="F1M4,2L4,14 12,8z" />
+                                                </DrawingGroup>
+                                            </DrawingBrush.Drawing>
+                                        </DrawingBrush>
+                                    </Rectangle.Fill>
+                                </Rectangle>
+                            </Viewbox>
+                            <TextBlock Text="Run" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+                    <CheckBox x:Name="CheckboxRunStartScriptOnStart" Content="Run automatically on start" HorizontalAlignment="Left" Margin="75,13,0,0" VerticalAlignment="Top"/>
+                    <CheckBox x:Name="CheckboxRunStopScriptOnStop" Content="Run automatically on exit" HorizontalAlignment="Left" Margin="75,13,0,0" VerticalAlignment="Top" Grid.Row="2"/>
+                    <CheckBox x:Name="CheckboxRunStartScriptAdAdmin" Content="Run ad admin" HorizontalAlignment="Left" Margin="273,13,0,0" VerticalAlignment="Top"/>
+                    <CheckBox x:Name="CheckboxRunStopScriptAdAdmin" Content="Run ad admin" HorizontalAlignment="Left" Margin="273,13,0,0" VerticalAlignment="Top" Grid.Row="2"/>
+                    <Button x:Name="ButtonClearStartOutput" Content="Clear" HorizontalAlignment="Right" Margin="0,10,10,0" VerticalAlignment="Top" Width="75" Click="ButtonClearStartOutput_Click"/>
+                    <Button x:Name="ButtonClearStopOutput" Content="Clear" HorizontalAlignment="Right" Margin="0,10,10,0" VerticalAlignment="Top" Width="75" Grid.Row="2" Click="ButtonClearStopOutput_Click"/>
+                </Grid>
+            </TabItem>
             <TabItem Header="Settings" FontSize="14">
                 <Grid Background="#FFE5E5E5">
                     <Grid.RowDefinitions>
@@ -802,50 +874,74 @@
                     <Label Content="ms" HorizontalAlignment="Left" Margin="439,65,0,0" VerticalAlignment="Top" FontSize="14" Background="{x:Null}" Height="29" Width="28"/>
                     <Label Content="App 1:" HorizontalAlignment="Left" Margin="10,147,0,0" VerticalAlignment="Top" FontSize="14" Height="29" Width="50"/>
                     <TextBox x:Name="TextBoxPathApp1" Height="23" Margin="170,150,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" HorizontalAlignment="Left" Width="398" TextChanged="TextBoxPathApp1_TextChanged" Text="Path to application to launch"/>
-                    <Label Content="App 2:" HorizontalAlignment="Left" Margin="10,175,0,0" VerticalAlignment="Top" FontSize="14" Height="29" Width="50"/>
-                    <TextBox x:Name="TextBoxPathApp2" Height="23" Margin="170,178,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" HorizontalAlignment="Left" Width="398" TextChanged="TextBoxPathApp2_TextChanged"/>
-                    <Label Content="App 3:" HorizontalAlignment="Left" Margin="10,203,0,0" VerticalAlignment="Top" FontSize="14" Height="29" Width="50"/>
-                    <TextBox x:Name="TextBoxPathApp3" Height="23" Margin="170,206,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" HorizontalAlignment="Left" Width="398" TextChanged="TextBoxPathApp3_TextChanged"/>
-                    <TextBox x:Name="TextBoxPathApp1_Arg0" Height="23" Margin="573,150,41,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" Text="Arguments to pass, for example &lt;IpAddress&gt;"/>
-                    <TextBox x:Name="TextBoxPathApp2_Arg0" Height="23" Margin="573,178,41,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14"/>
-                    <TextBox x:Name="TextBoxPathApp3_Arg0" Height="23" Margin="573,206,41,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14"/>
+                    <Label Content="App 2:" HorizontalAlignment="Left" Margin="10,203,0,0" VerticalAlignment="Top" FontSize="14" Height="29" Width="50"/>
+                    <TextBox x:Name="TextBoxPathApp2" Height="23" Margin="170,206,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" HorizontalAlignment="Left" Width="398" TextChanged="TextBoxPathApp2_TextChanged"/>
+                    <Label Content="App 3:" HorizontalAlignment="Left" Margin="10,259,0,0" VerticalAlignment="Top" FontSize="14" Height="29" Width="50"/>
+                    <TextBox x:Name="TextBoxPathApp3" Height="23" Margin="170,262,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" HorizontalAlignment="Left" Width="398" TextChanged="TextBoxPathApp3_TextChanged"/>
+                    <TextBox x:Name="TextBoxPathApp1_Arg0" Height="23" Margin="573,150,41,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" Text="Arguments to pass, for example &lt;IpAddress&gt;" TextChanged="TextBoxPathApp1_Arg0_TextChanged"/>
+                    <TextBox x:Name="TextBoxPathApp2_Arg0" Height="23" Margin="573,206,41,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" TextChanged="TextBoxPathApp2_Arg0_TextChanged"/>
+                    <TextBox x:Name="TextBoxPathApp3_Arg0" Height="23" Margin="573,262,41,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" TextChanged="TextBoxPathApp3_Arg0_TextChanged"/>
                     <TextBox x:Name="TextBoxPathBrowser_Arg0" Height="23" Margin="573,22,41,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14"/>
-                    <Label Content="Keywords available:" HorizontalAlignment="Left" Margin="14,379,0,0" VerticalAlignment="Top" FontSize="14" Height="29" Width="151"/>
-                    <Label Content="&lt;IpAddress&gt; &lt;Device&gt; &lt;User&gt; &lt;Pass&gt; &lt;MacAddress&gt; &lt;CustomArg1&gt; &lt;CustomArg2&gt; &lt;CustomArg3&gt;" Margin="15,408,142,0" VerticalAlignment="Top" FontSize="14" Height="29"/>
+                    <Label Content="Keywords available:" HorizontalAlignment="Left" Margin="14,610,0,0" VerticalAlignment="Top" FontSize="14" Height="29" Width="151"/>
+                    <Label Content="&lt;IpAddress&gt; &lt;Device&gt; &lt;User&gt; &lt;Pass&gt; &lt;MacAddress&gt; &lt;CustomArg1&gt; &lt;CustomArg2&gt; &lt;CustomArg3&gt;" Margin="10,644,147,0" VerticalAlignment="Top" FontSize="14" Height="29"/>
                     <TextBox x:Name="TextBoxLabelApp1" HorizontalAlignment="Left" Height="23" Margin="65,150,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" TextChanged="TextBoxLabelApp1_TextChanged" Text="App1"/>
-                    <TextBox x:Name="TextBoxLabelApp2" HorizontalAlignment="Left" Height="23" Margin="65,178,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" TextChanged="TextBoxLabelApp2_TextChanged" Text="App2"/>
-                    <TextBox x:Name="TextBoxLabelApp3" HorizontalAlignment="Left" Height="23" Margin="65,206,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" TextChanged="TextBoxLabelApp3_TextChanged" Text="App3"/>
+                    <TextBox x:Name="TextBoxLabelApp2" HorizontalAlignment="Left" Height="23" Margin="65,206,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" TextChanged="TextBoxLabelApp2_TextChanged" Text="App2"/>
+                    <TextBox x:Name="TextBoxLabelApp3" HorizontalAlignment="Left" Height="23" Margin="65,262,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" TextChanged="TextBoxLabelApp3_TextChanged" Text="App3"/>
                     <TextBox x:Name="TextBoxTimeoutLastPing" HorizontalAlignment="Left" Height="23" Margin="372,97,0,0" TextWrapping="Wrap" Text="60" VerticalAlignment="Top" Width="62" RenderTransformOrigin="0.475,1.522" TextChanged="TextBoxTimeoutLastPing_TextChanged"/>
                     <Label Content="Timeout last ping:" HorizontalAlignment="Left" Margin="241,94,0,0" VerticalAlignment="Top" FontSize="14" Background="{x:Null}" Height="29" Width="121"/>
                     <Label Content="s" HorizontalAlignment="Left" Margin="439,94,0,0" VerticalAlignment="Top" FontSize="14" Background="{x:Null}" Height="29" Width="16"/>
                     <CheckBox x:Name="CheckBoxCloseConsoleAtStartup" Content="Close console at startup" HorizontalAlignment="Left" Margin="14,102,0,0" VerticalAlignment="Top" Height="18" Width="192"/>
-                    <Label Content="App 4:" HorizontalAlignment="Left" Margin="10,231,0,0" VerticalAlignment="Top" FontSize="14" Height="29" Width="50"/>
-                    <TextBox x:Name="TextBoxPathApp4" Height="23" Margin="170,234,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" HorizontalAlignment="Left" Width="398" TextChanged="TextBoxPathApp4_TextChanged"/>
-                    <Label Content="App 5:" HorizontalAlignment="Left" Margin="10,259,0,0" VerticalAlignment="Top" FontSize="14" Height="29" Width="50"/>
-                    <TextBox x:Name="TextBoxPathApp5" Height="23" Margin="170,262,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" HorizontalAlignment="Left" Width="398" TextChanged="TextBoxPathApp5_TextChanged"/>
-                    <Label Content="App 6:" HorizontalAlignment="Left" Margin="10,287,0,0" VerticalAlignment="Top" FontSize="14" Height="29" Width="50"/>
-                    <TextBox x:Name="TextBoxPathApp6" Height="23" Margin="170,290,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" HorizontalAlignment="Left" Width="398" TextChanged="TextBoxPathApp6_TextChanged"/>
-                    <TextBox x:Name="TextBoxPathApp4_Arg0" Height="23" Margin="573,234,41,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14"/>
-                    <TextBox x:Name="TextBoxPathApp5_Arg0" Height="23" Margin="573,262,41,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14"/>
-                    <TextBox x:Name="TextBoxPathApp6_Arg0" Height="23" Margin="573,290,41,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14"/>
-                    <TextBox x:Name="TextBoxLabelApp4" HorizontalAlignment="Left" Height="23" Margin="65,234,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" TextChanged="TextBoxLabelApp4_TextChanged" Text="App4"/>
-                    <TextBox x:Name="TextBoxLabelApp5" HorizontalAlignment="Left" Height="23" Margin="65,262,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" TextChanged="TextBoxLabelApp5_TextChanged" Text="App5"/>
-                    <TextBox x:Name="TextBoxLabelApp6" HorizontalAlignment="Left" Height="23" Margin="65,290,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" TextChanged="TextBoxLabelApp6_TextChanged" Text="App6"/>
+                    <Label Content="App 4:" HorizontalAlignment="Left" Margin="10,315,0,0" VerticalAlignment="Top" FontSize="14" Height="29" Width="50"/>
+                    <TextBox x:Name="TextBoxPathApp4" Height="23" Margin="170,318,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" HorizontalAlignment="Left" Width="398" TextChanged="TextBoxPathApp4_TextChanged"/>
+                    <Label Content="App 5:" HorizontalAlignment="Left" Margin="10,371,0,0" VerticalAlignment="Top" FontSize="14" Height="29" Width="50"/>
+                    <TextBox x:Name="TextBoxPathApp5" Height="23" Margin="170,374,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" HorizontalAlignment="Left" Width="398" TextChanged="TextBoxPathApp5_TextChanged"/>
+                    <Label Content="App 6:" HorizontalAlignment="Left" Margin="10,427,0,0" VerticalAlignment="Top" FontSize="14" Height="29" Width="50"/>
+                    <TextBox x:Name="TextBoxPathApp6" Height="23" Margin="170,430,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" HorizontalAlignment="Left" Width="398" TextChanged="TextBoxPathApp6_TextChanged"/>
+                    <TextBox x:Name="TextBoxPathApp4_Arg0" Height="23" Margin="573,318,41,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" TextChanged="TextBoxPathApp4_Arg0_TextChanged"/>
+                    <TextBox x:Name="TextBoxPathApp5_Arg0" Height="23" Margin="573,374,41,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" TextChanged="TextBoxPathApp5_Arg0_TextChanged"/>
+                    <TextBox x:Name="TextBoxPathApp6_Arg0" Height="23" Margin="573,430,41,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" TextChanged="TextBoxPathApp6_Arg0_TextChanged"/>
+                    <TextBox x:Name="TextBoxLabelApp4" HorizontalAlignment="Left" Height="23" Margin="65,318,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" TextChanged="TextBoxLabelApp4_TextChanged" Text="App4"/>
+                    <TextBox x:Name="TextBoxLabelApp5" HorizontalAlignment="Left" Height="23" Margin="65,374,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" TextChanged="TextBoxLabelApp5_TextChanged" Text="App5"/>
+                    <TextBox x:Name="TextBoxLabelApp6" HorizontalAlignment="Left" Height="23" Margin="65,430,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" TextChanged="TextBoxLabelApp6_TextChanged" Text="App6"/>
                     <TextBox x:Name="TextBoxDelayBetweenLoops" HorizontalAlignment="Left" Height="23" Margin="677,97,0,0" TextWrapping="Wrap" Text="500" VerticalAlignment="Top" Width="62" RenderTransformOrigin="0.475,1.522" TextChanged="TextBoxDelayBetweenLoops_TextChanged"/>
                     <Label Content="Delay between polling cycle:" HorizontalAlignment="Left" Margin="484,94,0,0" VerticalAlignment="Top" FontSize="14" Background="{x:Null}" Height="29" Width="187"/>
                     <Label Content="ms" HorizontalAlignment="Left" Margin="739,94,0,0" VerticalAlignment="Top" FontSize="14" Background="{x:Null}" Height="29" Width="33"/>
-                    <Label Content="App 7:" HorizontalAlignment="Left" Margin="10,315,0,0" VerticalAlignment="Top" FontSize="14" Height="29" Width="50"/>
-                    <TextBox x:Name="TextBoxPathApp7" Height="23" Margin="170,318,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" HorizontalAlignment="Left" Width="398" TextChanged="TextBoxPathApp7_TextChanged"/>
-                    <TextBox x:Name="TextBoxPathApp7_Arg0" Height="23" Margin="573,318,41,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14"/>
-                    <TextBox x:Name="TextBoxLabelApp7" HorizontalAlignment="Left" Height="23" Margin="65,318,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" TextChanged="TextBoxLabelApp7_TextChanged" Text="App7"/>
-                    <Label Content="App 8:" HorizontalAlignment="Left" Margin="10,343,0,0" VerticalAlignment="Top" FontSize="14" Height="29" Width="50"/>
-                    <TextBox x:Name="TextBoxPathApp8" Height="23" Margin="170,346,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" HorizontalAlignment="Left" Width="398" TextChanged="TextBoxPathApp8_TextChanged"/>
-                    <TextBox x:Name="TextBoxPathApp8_Arg0" Height="23" Margin="573,346,41,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14"/>
-                    <TextBox x:Name="TextBoxLabelApp8" HorizontalAlignment="Left" Height="23" Margin="65,346,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" TextChanged="TextBoxLabelApp8_TextChanged" Text="App8"/>
+                    <Label Content="App 7:" HorizontalAlignment="Left" Margin="10,483,0,0" VerticalAlignment="Top" FontSize="14" Height="29" Width="50"/>
+                    <TextBox x:Name="TextBoxPathApp7" Height="23" Margin="170,486,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" HorizontalAlignment="Left" Width="398" TextChanged="TextBoxPathApp7_TextChanged"/>
+                    <TextBox x:Name="TextBoxPathApp7_Arg0" Height="23" Margin="573,486,41,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" TextChanged="TextBoxPathApp7_Arg0_TextChanged"/>
+                    <TextBox x:Name="TextBoxLabelApp7" HorizontalAlignment="Left" Height="23" Margin="65,486,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" TextChanged="TextBoxLabelApp7_TextChanged" Text="App7"/>
+                    <Label Content="App 8:" HorizontalAlignment="Left" Margin="10,540,0,0" VerticalAlignment="Top" FontSize="14" Height="29" Width="50"/>
+                    <TextBox x:Name="TextBoxPathApp8" Height="23" Margin="170,544,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" HorizontalAlignment="Left" Width="398" TextChanged="TextBoxPathApp8_TextChanged"/>
+                    <TextBox x:Name="TextBoxPathApp8_Arg0" Height="23" Margin="573,544,41,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" TextChanged="TextBoxPathApp8_Arg0_TextChanged"/>
+                    <TextBox x:Name="TextBoxLabelApp8" HorizontalAlignment="Left" Height="23" Margin="65,544,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" TextChanged="TextBoxLabelApp8_TextChanged" Text="App8"/>
                     <TextBox x:Name="TextBoxExportProfile" HorizontalAlignment="Left" Height="23" Margin="165,380,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="607" Visibility="Hidden"/>
                     <TextBox x:Name="TextBoxWindowWidth" Margin="0" Visibility="Hidden"/>
                     <TextBox x:Name="TextBoxWindowHeight" Margin="0" Visibility="Hidden"/>
                     <CheckBox x:Name="CheckBoxWindowMaximized" Margin="0"  Visibility="Hidden"/>
+                    <TextBox x:Name="TextBoxPathApp1_B" Height="23" Margin="170,178,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" HorizontalAlignment="Left" Width="398" Text="Path to application to launch" TextChanged="TextBoxPathApp1_B_TextChanged"/>
+                    <TextBox x:Name="TextBoxPathApp1_Arg0_B" Height="23" Margin="573,178,41,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" Text="Arguments to pass, for example &lt;IpAddress&gt;" TextChanged="TextBoxPathApp1_Arg0_B_TextChanged"/>
+                    <TextBox x:Name="TextBoxLabelApp1_B" HorizontalAlignment="Left" Height="23" Margin="65,178,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" Text="App1" TextChanged="TextBoxLabelApp1_B_TextChanged"/>
+                    <TextBox x:Name="TextBoxPathApp2_B" Height="23" Margin="170,234,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" HorizontalAlignment="Left" Width="398" TextChanged="TextBoxPathApp2_B_TextChanged"/>
+                    <TextBox x:Name="TextBoxPathApp2_Arg0_B" Height="23" Margin="573,234,41,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" TextChanged="TextBoxPathApp2_Arg0_B_TextChanged"/>
+                    <TextBox x:Name="TextBoxLabelApp2_B" HorizontalAlignment="Left" Height="23" Margin="65,234,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" Text="App2" TextChanged="TextBoxLabelApp2_B_TextChanged"/>
+                    <TextBox x:Name="TextBoxPathApp3_B" Height="23" Margin="170,290,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" HorizontalAlignment="Left" Width="398" TextChanged="TextBoxPathApp3_B_TextChanged"/>
+                    <TextBox x:Name="TextBoxPathApp3_Arg0_B" Height="23" Margin="573,290,41,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" TextChanged="TextBoxPathApp3_Arg0_B_TextChanged"/>
+                    <TextBox x:Name="TextBoxLabelApp3_B" HorizontalAlignment="Left" Height="23" Margin="65,290,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" Text="App3" TextChanged="TextBoxLabelApp3_B_TextChanged"/>
+                    <TextBox x:Name="TextBoxPathApp4_B" Height="23" Margin="170,346,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" HorizontalAlignment="Left" Width="398" TextChanged="TextBoxPathApp4_B_TextChanged"/>
+                    <TextBox x:Name="TextBoxPathApp4_Arg0_B" Height="23" Margin="573,346,41,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14"/>
+                    <TextBox x:Name="TextBoxLabelApp4_B" HorizontalAlignment="Left" Height="23" Margin="65,346,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" Text="App4" TextChanged="TextBoxLabelApp4_B_TextChanged"/>
+                    <TextBox x:Name="TextBoxPathApp5_B" Height="23" Margin="170,402,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" HorizontalAlignment="Left" Width="398" TextChanged="TextBoxPathApp5_B_TextChanged"/>
+                    <TextBox x:Name="TextBoxPathApp5_Arg0_B" Height="23" Margin="573,402,41,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14"/>
+                    <TextBox x:Name="TextBoxLabelApp5_B" HorizontalAlignment="Left" Height="23" Margin="65,402,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" Text="App5" TextChanged="TextBoxLabelApp5_B_TextChanged"/>
+                    <TextBox x:Name="TextBoxPathApp6_B" Height="23" Margin="170,458,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" HorizontalAlignment="Left" Width="398" TextChanged="TextBoxPathApp6_B_TextChanged"/>
+                    <TextBox x:Name="TextBoxPathApp6_Arg0_B" Height="23" Margin="573,458,41,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14"/>
+                    <TextBox x:Name="TextBoxLabelApp6_B" HorizontalAlignment="Left" Height="23" Margin="65,458,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" Text="App6" TextChanged="TextBoxLabelApp6_B_TextChanged"/>
+                    <TextBox x:Name="TextBoxPathApp7_B" Height="23" Margin="170,514,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" HorizontalAlignment="Left" Width="398" TextChanged="TextBoxPathApp7_B_TextChanged"/>
+                    <TextBox x:Name="TextBoxPathApp7_Arg0_B" Height="23" Margin="573,514,41,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14"/>
+                    <TextBox x:Name="TextBoxLabelApp7_B" HorizontalAlignment="Left" Height="23" Margin="65,514,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" Text="App7" TextChanged="TextBoxLabelApp7_B_TextChanged"/>
+                    <TextBox x:Name="TextBoxPathApp8_B" Height="23" Margin="170,572,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" HorizontalAlignment="Left" Width="398" TextChanged="TextBoxPathApp8_B_TextChanged"/>
+                    <TextBox x:Name="TextBoxPathApp8_Arg0_B" Height="23" Margin="573,572,41,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14"/>
+                    <TextBox x:Name="TextBoxLabelApp8_B" HorizontalAlignment="Left" Height="23" Margin="65,572,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" Text="App8" TextChanged="TextBoxLabelApp8_B_TextChanged"/>
                 </Grid>
             </TabItem>
         </TabControl>

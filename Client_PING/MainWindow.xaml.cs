@@ -99,6 +99,12 @@ namespace Client_PING
 
         public bool editedDescriptionOrNotes = false;
 
+        public int offset = 0;
+        public string[,] labels = new string[2,8];
+        public string[,] paths = new string[2,8];
+        public string[,] args = new string[2,8];
+        public bool init = false;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -504,6 +510,26 @@ namespace Client_PING
 
                 // Saving ip address list
                 save.ip_addresses = ListDevices.ToArray<IPEntry>();
+
+                TextRange text;
+
+                RichTextBoxStartScript.Dispatcher.Invoke((Action)delegate
+                {
+                    text = new TextRange(RichTextBoxStartScript.Document.ContentStart, RichTextBoxStartScript.Document.ContentEnd);
+                    save.StartScript = text.Text;
+
+                    save.StartScriptRunOnStart = (bool)CheckboxRunStartScriptOnStart.IsChecked;
+                    save.StartScriptRunAsAdmin = (bool)CheckboxRunStartScriptAdAdmin.IsChecked;
+                });
+
+                RichTextBoxStopScript.Dispatcher.Invoke((Action)delegate
+                {
+                    text = new TextRange(RichTextBoxStopScript.Document.ContentStart, RichTextBoxStopScript.Document.ContentEnd);
+                    save.StopScript = text.Text;
+
+                    save.StopScriptRunOnStop = (bool)CheckboxRunStopScriptOnStop.IsChecked;
+                    save.StopScriptRunAsAdmin = (bool)CheckboxRunStopScriptAdAdmin.IsChecked;
+                });
 
                 JavaScriptSerializer jss = new JavaScriptSerializer();
 
@@ -965,6 +991,18 @@ namespace Client_PING
 
                 LabelDeviceCount.Dispatcher.Invoke((Action)delegate
                 {
+                    RichTextBoxStartScript.Document.Blocks.Clear();
+                    RichTextBoxStartScript.AppendText(saved.StartScript);
+
+                    CheckboxRunStartScriptOnStart.IsChecked = saved.StartScriptRunOnStart;
+                    CheckboxRunStartScriptAdAdmin.IsChecked = saved.StartScriptRunAsAdmin;
+
+                    RichTextBoxStopScript.Document.Blocks.Clear();
+                    RichTextBoxStopScript.AppendText(saved.StopScript);
+
+                    CheckboxRunStopScriptOnStop.IsChecked = saved.StopScriptRunOnStop;
+                    CheckboxRunStopScriptAdAdmin.IsChecked = saved.StopScriptRunAsAdmin;
+
                     LabelDeviceCount.Content = saved.ip_addresses.Length.ToString();
                 });
 
@@ -1468,6 +1506,9 @@ namespace Client_PING
             // Assegno il datasource alla tabella
             DataGridListaIp.ItemsSource = null;
             DataGridListaIp.ItemsSource = ListDevices;
+
+            init = true;
+            ApplyOffset(offset);
         }
 
         private void ComboBoxProfileSelected_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -1479,10 +1520,18 @@ namespace Client_PING
 
                 // Salvo il profilo precedente
                 if (oldProfile.Length > 0)
+                {
                     saveProfile(oldProfile);
+
+                    if ((bool)CheckboxRunStopScriptOnStop.IsChecked)
+                        ButtonRunStopScript_Click(null, null);
+                }
 
                 // Carico il profilo selezionato
                 loadProfile(ComboBoxProfileSelected.SelectedValue.ToString());
+
+                if ((bool)CheckboxRunStartScriptOnStart.IsChecked)
+                    ButtonRunStartScript_Click(null, null);
 
                 // Aggiorno la variabile oldProfile
                 oldProfile = ComboBoxProfileSelected.SelectedValue.ToString();
@@ -1633,8 +1682,22 @@ namespace Client_PING
                     WindowMenu_Info_Click(null, null);
                 }
 
+                if(e.Key == Key.B)
+                {
+                    if (offset != 1)
+                    {
+                        offset = 1;
+                        ApplyOffset(offset);
+                    }
+                    else
+                    {
+                        offset = 0;
+                        ApplyOffset(offset);
+                    }
+                }
+
                 // Cambia tab
-                if (e.Key == Key.D1)
+                /*if (e.Key == Key.D1)
                 {
                     TabControlGenerale.SelectedIndex = 0;
                 }
@@ -1645,7 +1708,7 @@ namespace Client_PING
                 if (e.Key == Key.D3)
                 {
                     TabControlGenerale.SelectedIndex = 2;
-                }
+                }*/
 
                 // Tasto Shift premuto
                 if (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift)) 
@@ -1669,41 +1732,20 @@ namespace Client_PING
 
         private void TextBoxLabelApp1_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if(TextBoxLabelApp1.Text.Length > 0)
-            {
-                ButtonWeb1_Main_Text.Text = TextBoxLabelApp1.Text;
-                ButtonWeb1_Main.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                ButtonWeb1_Main.Visibility = Visibility.Hidden;
-            }
+            labels[0, 0] = TextBoxLabelApp1.Text;
+            ApplyOffset(0);
         }
 
         private void TextBoxLabelApp2_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if(TextBoxLabelApp2.Text.Length > 0)
-            {
-                ButtonWeb2_Main_Text.Text = TextBoxLabelApp2.Text;
-                ButtonWeb2_Main.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                ButtonWeb2_Main.Visibility = Visibility.Hidden;
-            }
+            labels[0, 1] = TextBoxLabelApp2.Text;
+            ApplyOffset(0);
         }
 
         private void TextBoxLabelApp3_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if(TextBoxLabelApp3.Text.Length > 0)
-            {
-                ButtonWeb3_Main_Text.Text = TextBoxLabelApp3.Text;
-                ButtonWeb3_Main.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                ButtonWeb3_Main.Visibility = Visibility.Hidden;
-            }
+            labels[0, 2] = TextBoxLabelApp3.Text;
+            ApplyOffset(0);
         }
 
         private void TextBoxTimeout_TextChanged(object sender, TextChangedEventArgs e)
@@ -1748,8 +1790,8 @@ namespace Client_PING
                 p.StartInfo = new ProcessStartInfo()
                 {
                     WorkingDirectory = Directory.GetCurrentDirectory(),
-                    FileName = TextBoxPathApp1.Text,
-                    Arguments = ApplyMacros(TextBoxPathApp1_Arg0.Text),
+                    FileName = paths[offset, 0],
+                    Arguments = ApplyMacros(args[offset, 0]),
                     UseShellExecute = true,
                     RedirectStandardOutput = false,
                     RedirectStandardError = false,
@@ -1773,8 +1815,8 @@ namespace Client_PING
                 p.StartInfo = new ProcessStartInfo()
                 {
                     WorkingDirectory = Directory.GetCurrentDirectory(),
-                    FileName = TextBoxPathApp2.Text,
-                    Arguments = ApplyMacros(TextBoxPathApp2_Arg0.Text),
+                    FileName = paths[offset, 1],
+                    Arguments = ApplyMacros(args[offset, 1]),
                     UseShellExecute = true,
                     RedirectStandardOutput = false,
                     RedirectStandardError = false,
@@ -1798,8 +1840,8 @@ namespace Client_PING
                 p.StartInfo = new ProcessStartInfo()
                 {
                     WorkingDirectory = Directory.GetCurrentDirectory(),
-                    FileName = TextBoxPathApp3.Text,
-                    Arguments = ApplyMacros(TextBoxPathApp3_Arg0.Text),
+                    FileName = paths[offset, 2],
+                    Arguments = ApplyMacros(args[offset, 2]),
                     UseShellExecute = true,
                     RedirectStandardOutput = false,
                     RedirectStandardError = false,
@@ -1823,8 +1865,8 @@ namespace Client_PING
                 p.StartInfo = new ProcessStartInfo()
                 {
                     WorkingDirectory = Directory.GetCurrentDirectory(),
-                    FileName = TextBoxPathApp4.Text,
-                    Arguments = ApplyMacros(TextBoxPathApp4_Arg0.Text),
+                    FileName = paths[offset, 3],
+                    Arguments = ApplyMacros(args[offset, 3]),
                     UseShellExecute = true,
                     RedirectStandardOutput = false,
                     RedirectStandardError = false,
@@ -1848,8 +1890,8 @@ namespace Client_PING
                 p.StartInfo = new ProcessStartInfo()
                 {
                     WorkingDirectory = Directory.GetCurrentDirectory(),
-                    FileName = TextBoxPathApp5.Text,
-                    Arguments = ApplyMacros(TextBoxPathApp5_Arg0.Text),
+                    FileName = paths[offset, 4],
+                    Arguments = ApplyMacros(args[offset, 4]),
                     UseShellExecute = true,
                     RedirectStandardOutput = false,
                     RedirectStandardError = false,
@@ -1873,8 +1915,8 @@ namespace Client_PING
                 p.StartInfo = new ProcessStartInfo()
                 {
                     WorkingDirectory = Directory.GetCurrentDirectory(),
-                    FileName = TextBoxPathApp6.Text,
-                    Arguments = ApplyMacros(TextBoxPathApp6_Arg0.Text),
+                    FileName = paths[offset, 5],
+                    Arguments = ApplyMacros(args[offset, 5]),
                     UseShellExecute = true,
                     RedirectStandardOutput = false,
                     RedirectStandardError = false,
@@ -1898,8 +1940,8 @@ namespace Client_PING
                 p.StartInfo = new ProcessStartInfo()
                 {
                     WorkingDirectory = Directory.GetCurrentDirectory(),
-                    FileName = TextBoxPathApp7.Text,
-                    Arguments = ApplyMacros(TextBoxPathApp7_Arg0.Text),
+                    FileName = paths[offset, 6],
+                    Arguments = ApplyMacros(args[offset, 6]),
                     UseShellExecute = true,
                     RedirectStandardOutput = false,
                     RedirectStandardError = false,
@@ -1923,8 +1965,8 @@ namespace Client_PING
                 p.StartInfo = new ProcessStartInfo()
                 {
                     WorkingDirectory = Directory.GetCurrentDirectory(),
-                    FileName = TextBoxPathApp8.Text,
-                    Arguments = ApplyMacros(TextBoxPathApp8_Arg0.Text),
+                    FileName = paths[offset, 7],
+                    Arguments = ApplyMacros(args[offset, 7]),
                     UseShellExecute = true,
                     RedirectStandardOutput = false,
                     RedirectStandardError = false,
@@ -1941,66 +1983,31 @@ namespace Client_PING
 
         private void TextBoxLabelApp4_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if(TextBoxLabelApp4.Text.Length > 0)
-            {
-                ButtonWeb4_Main_Text.Text = TextBoxLabelApp4.Text;
-                ButtonWeb4_Main.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                ButtonWeb4_Main.Visibility = Visibility.Hidden;
-            }
+            labels[0, 3] = TextBoxLabelApp4.Text;
+            ApplyOffset(0);
         }
 
         private void TextBoxLabelApp5_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if(TextBoxLabelApp5.Text.Length > 0)
-            {
-                ButtonWeb5_Main_Text.Text = TextBoxLabelApp5.Text;
-                ButtonWeb5_Main.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                ButtonWeb5_Main.Visibility = Visibility.Hidden;
-            }
+            labels[0, 4] = TextBoxLabelApp5.Text;
+            ApplyOffset(0);
         }
 
         private void TextBoxLabelApp6_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if(TextBoxLabelApp6.Text.Length > 0)
-            {
-                ButtonWeb6_Main_Text.Text = TextBoxLabelApp6.Text;
-                ButtonWeb6_Main.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                ButtonWeb6_Main.Visibility = Visibility.Hidden;
-            }
+            labels[0, 5] = TextBoxLabelApp6.Text;
+            ApplyOffset(0);
         }
 
         private void TextBoxLabelApp7_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (TextBoxLabelApp7.Text.Length > 0)
-            {
-                ButtonWeb7_Main_Text.Text = TextBoxLabelApp7.Text;
-                ButtonWeb7_Main.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                ButtonWeb7_Main.Visibility = Visibility.Hidden;
-            }
+            labels[0, 6] = TextBoxLabelApp7.Text;
+            ApplyOffset(0);
         }
         private void TextBoxLabelApp8_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (TextBoxLabelApp8.Text.Length > 0)
-            {
-                ButtonWeb8_Main_Text.Text = TextBoxLabelApp8.Text;
-                ButtonWeb8_Main.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                ButtonWeb8_Main.Visibility = Visibility.Hidden;
-            }
+            labels[0, 7] = TextBoxLabelApp8.Text;
+            ApplyOffset(0);
         }
 
         private void CheckBoxUseThreadsForPing_Checked(object sender, RoutedEventArgs e)
@@ -2022,6 +2029,98 @@ namespace Client_PING
             }
         }
 
+        public void ApplyOffset(int offset)
+        {
+            if (init)
+            {
+                switch (offset)
+                {
+                    case 0:
+                        ApplyIconFromExe(ButtonWeb1_Main_Image, paths[offset, 0]);
+                        ApplyIconFromExe(ButtonWeb2_Main_Image, paths[offset, 1]);
+                        ApplyIconFromExe(ButtonWeb3_Main_Image, paths[offset, 2]);
+                        ApplyIconFromExe(ButtonWeb4_Main_Image, paths[offset, 3]);
+                        ApplyIconFromExe(ButtonWeb5_Main_Image, paths[offset, 4]);
+                        ApplyIconFromExe(ButtonWeb6_Main_Image, paths[offset, 5]);
+                        ApplyIconFromExe(ButtonWeb7_Main_Image, paths[offset, 6]);
+                        ApplyIconFromExe(ButtonWeb8_Main_Image, paths[offset, 7]);
+
+                        ApplyLabel(ButtonWeb1_Main_Text, labels[offset, 0]);
+                        ApplyLabel(ButtonWeb2_Main_Text, labels[offset, 1]);
+                        ApplyLabel(ButtonWeb3_Main_Text, labels[offset, 2]);
+                        ApplyLabel(ButtonWeb4_Main_Text, labels[offset, 3]);
+                        ApplyLabel(ButtonWeb5_Main_Text, labels[offset, 4]);
+                        ApplyLabel(ButtonWeb6_Main_Text, labels[offset, 5]);
+                        ApplyLabel(ButtonWeb7_Main_Text, labels[offset, 6]);
+                        ApplyLabel(ButtonWeb8_Main_Text, labels[offset, 7]);
+
+                        ApplyVisibility(ButtonWeb1_Main, labels[offset, 0]);
+                        ApplyVisibility(ButtonWeb2_Main, labels[offset, 1]);
+                        ApplyVisibility(ButtonWeb3_Main, labels[offset, 2]);
+                        ApplyVisibility(ButtonWeb4_Main, labels[offset, 3]);
+                        ApplyVisibility(ButtonWeb5_Main, labels[offset, 4]);
+                        ApplyVisibility(ButtonWeb6_Main, labels[offset, 5]);
+                        ApplyVisibility(ButtonWeb7_Main, labels[offset, 6]);
+                        ApplyVisibility(ButtonWeb8_Main, labels[offset, 7]);
+                        break;
+
+                    case 1:
+                        ApplyIconFromExe(ButtonWeb1_Main_Image, paths[offset, 0]);
+                        ApplyIconFromExe(ButtonWeb2_Main_Image, paths[offset, 1]);
+                        ApplyIconFromExe(ButtonWeb3_Main_Image, paths[offset, 2]);
+                        ApplyIconFromExe(ButtonWeb4_Main_Image, paths[offset, 3]);
+                        ApplyIconFromExe(ButtonWeb5_Main_Image, paths[offset, 4]);
+                        ApplyIconFromExe(ButtonWeb6_Main_Image, paths[offset, 5]);
+                        ApplyIconFromExe(ButtonWeb7_Main_Image, paths[offset, 6]);
+                        ApplyIconFromExe(ButtonWeb8_Main_Image, paths[offset, 7]);
+
+                        ApplyLabel(ButtonWeb1_Main_Text, labels[offset, 0]);
+                        ApplyLabel(ButtonWeb2_Main_Text, labels[offset, 1]);
+                        ApplyLabel(ButtonWeb3_Main_Text, labels[offset, 2]);
+                        ApplyLabel(ButtonWeb4_Main_Text, labels[offset, 3]);
+                        ApplyLabel(ButtonWeb5_Main_Text, labels[offset, 4]);
+                        ApplyLabel(ButtonWeb6_Main_Text, labels[offset, 5]);
+                        ApplyLabel(ButtonWeb7_Main_Text, labels[offset, 6]);
+                        ApplyLabel(ButtonWeb8_Main_Text, labels[offset, 7]);
+
+                        ApplyVisibility(ButtonWeb1_Main, labels[offset, 0]);
+                        ApplyVisibility(ButtonWeb2_Main, labels[offset, 1]);
+                        ApplyVisibility(ButtonWeb3_Main, labels[offset, 2]);
+                        ApplyVisibility(ButtonWeb4_Main, labels[offset, 3]);
+                        ApplyVisibility(ButtonWeb5_Main, labels[offset, 4]);
+                        ApplyVisibility(ButtonWeb6_Main, labels[offset, 5]);
+                        ApplyVisibility(ButtonWeb7_Main, labels[offset, 6]);
+                        ApplyVisibility(ButtonWeb8_Main, labels[offset, 7]);
+                        break;
+                }
+            }
+        }
+
+        public void ApplyLabel(TextBlock textBlockButton, string label)
+        {
+            if (label.Length > 0)
+            {
+                textBlockButton.Text = label;
+                textBlockButton.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                textBlockButton.Visibility = Visibility.Hidden;
+            }
+        }
+
+        public void ApplyVisibility(Button button, string label)
+        {
+            if (label.Length > 0)
+            {
+                button.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                button.Visibility = Visibility.Hidden;
+            }
+        }
+
         public void ApplyIconFromExe(Image image, String path)
         {
             if (System.IO.File.Exists(path))
@@ -2038,42 +2137,50 @@ namespace Client_PING
 
         private void TextBoxPathApp1_TextChanged(object sender, TextChangedEventArgs e)
         {
-            ApplyIconFromExe(ButtonWeb1_Main_Image, TextBoxPathApp1.Text);
+            paths[0,0] = TextBoxPathApp1.Text;
+            // ApplyOffset(offset);
         }
 
         private void TextBoxPathApp2_TextChanged(object sender, TextChangedEventArgs e)
         {
-            ApplyIconFromExe(ButtonWeb2_Main_Image, TextBoxPathApp2.Text);
+            paths[0, 1] = TextBoxPathApp2.Text;
+            // ApplyOffset(offset);
         }
 
         private void TextBoxPathApp3_TextChanged(object sender, TextChangedEventArgs e)
         {
-            ApplyIconFromExe(ButtonWeb3_Main_Image, TextBoxPathApp3.Text);
+            paths[0, 2] = TextBoxPathApp3.Text;
+            // ApplyOffset(offset);
         }
 
         private void TextBoxPathApp4_TextChanged(object sender, TextChangedEventArgs e)
         {
-            ApplyIconFromExe(ButtonWeb4_Main_Image, TextBoxPathApp4.Text);
+            paths[0, 3] = TextBoxPathApp4.Text;
+            // ApplyOffset(offset);
         }
 
         private void TextBoxPathApp5_TextChanged(object sender, TextChangedEventArgs e)
         {
-            ApplyIconFromExe(ButtonWeb5_Main_Image, TextBoxPathApp5.Text);
+            paths[0, 4] = TextBoxPathApp5.Text;
+            // ApplyOffset(offset);
         }
 
         private void TextBoxPathApp6_TextChanged(object sender, TextChangedEventArgs e)
         {
-            ApplyIconFromExe(ButtonWeb6_Main_Image, TextBoxPathApp6.Text);
+            paths[0, 5] = TextBoxPathApp6.Text;
+            // ApplyOffset(offset);
         }
 
         private void TextBoxPathApp7_TextChanged(object sender, TextChangedEventArgs e)
         {
-            ApplyIconFromExe(ButtonWeb7_Main_Image, TextBoxPathApp7.Text);
+            paths[0, 6] = TextBoxPathApp7.Text;
+            // ApplyOffset(offset);
         }
 
         private void TextBoxPathApp8_TextChanged(object sender, TextChangedEventArgs e)
         {
-            ApplyIconFromExe(ButtonWeb8_Main_Image, TextBoxPathApp8.Text);
+            paths[0, 7] = TextBoxPathApp8.Text;
+            // ApplyOffset(offset);
         }
 
         private void ButtonDeleteProfile_Click(object sender, RoutedEventArgs e)
@@ -2206,10 +2313,320 @@ namespace Client_PING
                     break;
             }
         }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.LeftShift || e.Key == Key.RightShift)
+            {
+                if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl))
+                {
+                    if (offset != 1)
+                    {
+                        offset = 1;
+                        ApplyOffset(offset);
+                    }
+                    else
+                    {
+                        offset = 0;
+                        ApplyOffset(offset);
+                    }
+                }
+            }
+        }
+
+        private void TextBoxPathApp1_Arg0_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            args[0, 0] = TextBoxPathApp1_Arg0.Text;
+        }
+
+        private void TextBoxPathApp2_Arg0_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            args[0, 1] = TextBoxPathApp2_Arg0.Text;
+        }
+
+        private void TextBoxPathApp3_Arg0_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            args[0, 2] = TextBoxPathApp3_Arg0.Text;
+        }
+
+        private void TextBoxPathApp4_Arg0_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            args[0, 3] = TextBoxPathApp4_Arg0.Text;
+        }
+
+        private void TextBoxPathApp5_Arg0_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            args[0, 4] = TextBoxPathApp5_Arg0.Text;
+        }
+
+        private void TextBoxPathApp6_Arg0_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            args[0, 5] = TextBoxPathApp6_Arg0.Text;
+        }
+
+        private void TextBoxPathApp7_Arg0_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            args[0, 6] = TextBoxPathApp7_Arg0.Text;
+        }
+
+        private void TextBoxPathApp8_Arg0_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            args[0, 7] = TextBoxPathApp8_Arg0.Text;
+        }
+
+        private void TextBoxPathApp1_Arg0_B_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            args[1, 0] = TextBoxPathApp1_Arg0_B.Text;
+        }
+
+        private void TextBoxPathApp2_Arg0_B_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            args[1, 1] = TextBoxPathApp2_Arg0_B.Text;
+        }
+
+        private void TextBoxPathApp3_Arg0_B_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            args[1, 2] = TextBoxPathApp3_Arg0_B.Text;
+        }
+
+        private void TextBoxPathApp4_Arg0_B_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            args[1, 3] = TextBoxPathApp4_Arg0_B.Text;
+        }
+
+        private void TextBoxPathApp5_Arg0_B_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            args[1, 4] = TextBoxPathApp5_Arg0_B.Text;
+        }
+
+        private void TextBoxPathApp6_Arg0_B_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            args[1, 5] = TextBoxPathApp6_Arg0_B.Text;
+        }
+
+        private void TextBoxPathApp7_Arg0_B_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            args[1, 6] = TextBoxPathApp7_Arg0_B.Text;
+        }
+
+        private void TextBoxPathApp8_Arg0_B_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            args[1, 7] = TextBoxPathApp8_Arg0_B.Text;
+        }
+
+        private void TextBoxLabelApp1_B_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            labels[1, 0] = TextBoxLabelApp1_B.Text;
+            ApplyOffset(0);
+        }
+
+        private void TextBoxLabelApp2_B_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            labels[1, 1] = TextBoxLabelApp2_B.Text;
+            ApplyOffset(0);
+        }
+
+        private void TextBoxLabelApp3_B_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            labels[1, 2] = TextBoxLabelApp3_B.Text;
+            ApplyOffset(0);
+        }
+
+        private void TextBoxLabelApp4_B_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            labels[1, 3] = TextBoxLabelApp4_B.Text;
+            ApplyOffset(0);
+        }
+
+        private void TextBoxLabelApp5_B_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            labels[1, 4] = TextBoxLabelApp5_B.Text;
+            ApplyOffset(0);
+        }
+
+        private void TextBoxLabelApp6_B_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            labels[1, 5] = TextBoxLabelApp6_B.Text;
+            ApplyOffset(0);
+        }
+
+        private void TextBoxLabelApp7_B_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            labels[1, 6] = TextBoxLabelApp7_B.Text;
+            ApplyOffset(0);
+        }
+
+        private void TextBoxLabelApp8_B_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            labels[1, 7] = TextBoxLabelApp8_B.Text;
+            ApplyOffset(0);
+        }
+
+        private void TextBoxPathApp1_B_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            paths[1, 0] = TextBoxPathApp1_B.Text;
+            // ApplyOffset(offset);
+        }
+
+        private void TextBoxPathApp2_B_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            paths[1, 1] = TextBoxPathApp2_B.Text;
+            // ApplyOffset(offset);
+        }
+
+        private void TextBoxPathApp3_B_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            paths[1, 2] = TextBoxPathApp3_B.Text;
+            // ApplyOffset(offset);
+        }
+
+        private void TextBoxPathApp4_B_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            paths[1, 3] = TextBoxPathApp4_B.Text;
+            // ApplyOffset(offset);
+        }
+
+        private void TextBoxPathApp5_B_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            paths[1, 4] = TextBoxPathApp5_B.Text;
+            // ApplyOffset(offset);
+        }
+
+        private void TextBoxPathApp6_B_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            paths[1, 5] = TextBoxPathApp6_B.Text;
+            // ApplyOffset(offset);
+        }
+
+        private void TextBoxPathApp7_B_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            paths[1, 6] = TextBoxPathApp7_B.Text;
+            // ApplyOffset(offset);
+        }
+
+        private void TextBoxPathApp8_B_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            paths[1, 7] = TextBoxPathApp7_B.Text;
+            // ApplyOffset(offset);
+        }
+
+        private void ButtonRunStartScript_Click(object sender, RoutedEventArgs e)
+        {
+            TextRange tr = new TextRange(RichTextBoxStartScript.Document.ContentStart, RichTextBoxStartScript.Document.ContentEnd);
+
+            string[] cmds = tr.Text.Split('\n');
+
+            RichTextBoxStartOutput.Dispatcher.Invoke((Action)delegate
+            {
+                RichTextBoxStartOutput.Document.Blocks.Clear();
+            });
+
+            foreach (string cmd in cmds)
+            {
+                Process p = new Process();
+                p.StartInfo.FileName = "cmd.exe";
+
+                CheckboxRunStartScriptAdAdmin.Dispatcher.Invoke((Action)delegate
+                {
+                    if ((bool)CheckboxRunStartScriptAdAdmin.IsChecked)
+                    {
+                        p.StartInfo.Verb = "runas";
+                    }
+                });
+
+                p.StartInfo.RedirectStandardInput = true;
+                p.StartInfo.RedirectStandardOutput = true;
+                p.StartInfo.CreateNoWindow = true;
+                p.StartInfo.UseShellExecute = false;
+                p.Start();
+
+                p.StandardInput.WriteLine(cmd);
+                p.StandardInput.Flush();
+                p.StandardInput.Close();
+                p.WaitForExit();
+
+                string output = p.StandardOutput.ReadToEnd();
+
+                for (int i = 2; i < output.Split('\n').Length - 1; i++)
+                {
+                    Console.WriteLine(output.Split('\n')[i]);
+
+                    RichTextBoxStartOutput.Dispatcher.Invoke((Action)delegate
+                    {
+                        RichTextBoxStartOutput.AppendText(output.Split('\n')[i]);
+                    });
+                }
+            }
+        }
+
+        private void ButtonRunStopScript_Click(object sender, RoutedEventArgs e)
+        {
+            TextRange tr = new TextRange(RichTextBoxStopScript.Document.ContentStart, RichTextBoxStopScript.Document.ContentEnd);
+
+            string[] cmds = tr.Text.Split('\n');
+
+            RichTextBoxStopOutput.Dispatcher.Invoke((Action)delegate
+            {
+                RichTextBoxStopOutput.Document.Blocks.Clear();
+            });
+
+            foreach (string cmd in cmds)
+            {
+                Process p = new Process();
+                p.StartInfo.FileName = "cmd.exe";
+
+                CheckboxRunStopScriptAdAdmin.Dispatcher.Invoke((Action)delegate
+                {
+                    if ((bool)CheckboxRunStopScriptAdAdmin.IsChecked)
+                    {
+                        p.StartInfo.Verb = "runas";
+                    }
+                });
+
+                p.StartInfo.RedirectStandardInput = true;
+                p.StartInfo.RedirectStandardOutput = true;
+                p.StartInfo.CreateNoWindow = true;
+                p.StartInfo.UseShellExecute = false;
+                p.Start();
+
+                p.StandardInput.WriteLine(cmd);
+                p.StandardInput.Flush();
+                p.StandardInput.Close();
+                p.WaitForExit();
+
+                string output = p.StandardOutput.ReadToEnd();
+
+                for (int i = 2; i < output.Split('\n').Length - 1; i++)
+                {
+                    Console.WriteLine(output.Split('\n')[i]);
+
+                    RichTextBoxStopOutput.Dispatcher.Invoke((Action)delegate
+                    {
+                        RichTextBoxStopOutput.AppendText(output.Split('\n')[i]);
+                    });
+                }
+            }
+        }
+
+        private void ButtonClearStartOutput_Click(object sender, RoutedEventArgs e)
+        {
+            RichTextBoxStartOutput.Document.Blocks.Clear();
+        }
+
+        private void ButtonClearStopOutput_Click(object sender, RoutedEventArgs e)
+        {
+            RichTextBoxStopOutput.Document.Blocks.Clear();
+        }
     }
     public class File_IP_Config
     {
         public IPEntry[] ip_addresses { get; set; }
+        public string StartScript { get; set; }
+        public bool StartScriptRunOnStart { get; set; }
+        public bool StartScriptRunAsAdmin { get; set; }
+        public string StopScript { get; set; }
+        public bool StopScriptRunOnStop { get; set; }
+        public bool StopScriptRunAsAdmin { get; set; }
     }
 
 
