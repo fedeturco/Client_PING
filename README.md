@@ -3,8 +3,8 @@ C#/WPF client useful to keep track of network devices, if they are online or not
 
 ## Release
 
-### v1.2
-https://github.com/Fedex1515/Client_PING/releases/download/1.2/Client_PING_v1.2.zip
+### v1.3
+https://github.com/Fedex1515/Client_PING/releases/download/1.3/Client_PING_v1.3.zip
 
 ### Manual
 TODO
@@ -27,6 +27,12 @@ The following image shows an example of configuration with different application
 You can launch your specific application passing different arguments, for example the ip address of the device or username/password for the authentication process:
 
 ![alt text](https://github.com/Fedex1515/Client_PING/blob/master/Client_PING/Screenshots/Tab_3_Settings.PNG?raw=true)
+
+## Script tab:
+
+You can simply add scripts to add or remove routes when you change the current profile, useful if your devices are behind a vpn or a specific gateway where you need custom routes to reach them.
+
+![alt text](https://github.com/Fedex1515/Client_PING/blob/master/Client_PING/Screenshots/Tab_4_Scripts.PNG?raw=true)
 
 ## Device tab:
 
