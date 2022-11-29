@@ -63,7 +63,8 @@
       "CheckBoxCloseConsoleAtStartup": "",
       "CheckBoxPinWIndow": "",
       "CheckBoxUseThreadsForPing": "",
-      "CheckBoxWindowMaximized": ""
+      "CheckBoxWindowMaximized": "",
+      "CheckBoxDarkMode": ""
     },
     "menuItems": {
       "ViewStatusPing": "",

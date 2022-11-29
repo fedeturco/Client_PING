@@ -6,11 +6,11 @@
         xmlns:local="clr-namespace:Client_PING"
         mc:Ignorable="d"
         Title="MainWindow" Height="785.975" Width="846" Loaded="Window_Loaded" Closing="Window_Closing" KeyUp="Window_KeyUp" MinWidth="674" MinHeight="400" KeyDown="Window_KeyDown">
-    <Grid>
+    <Grid x:Name="GridMain">
         <DockPanel>
-            <Menu DockPanel.Dock="Top" x:Name="MenuBar" Background="{x:Null}">
+            <Menu DockPanel.Dock="Top" x:Name="MenuBar">
                 <MenuItem Header="_File" FontSize="16">
-                    <MenuItem Header="Import CSV" Click="MenuItemImportCsv">
+                    <MenuItem Header="Import CSV" Click="MenuItemImportCsv" Foreground="#2d2d30">
                         <MenuItem.Icon>
                             <Viewbox Width="16 " Height="16" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:System="clr-namespace:System;assembly=mscorlib">
                                 <Rectangle Width="16 " Height="16">
@@ -38,7 +38,7 @@
                             </Viewbox>
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="Open Console" Click="MenuItemApriConsole">
+                    <MenuItem Header="Open Console" Click="MenuItemApriConsole" Foreground="#2d2d30">
                         <MenuItem.Icon>
                             <Viewbox Width="16" Height="16" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
                                 <Rectangle Width="16" Height="16">
@@ -59,7 +59,7 @@
                             </Viewbox>
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="Close Console" Click="MenuItemChiudiConsole">
+                    <MenuItem Header="Close Console" Click="MenuItemChiudiConsole" Foreground="#2d2d30">
                         <MenuItem.Icon>
                             <Viewbox Width="16" Height="16" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
                                 <Rectangle Width="16" Height="16">
@@ -80,7 +80,7 @@
                             </Viewbox>
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="Save" Click="MenuItemSalva">
+                    <MenuItem Header="Save" Click="MenuItemSalva" Foreground="#2d2d30">
                         <MenuItem.Icon>
                             <Viewbox Width="16" Height="16" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
                                 <Rectangle Width="16" Height="16">
@@ -102,7 +102,7 @@
                             </Viewbox>
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="Exit" Click="MenuItemExit">
+                    <MenuItem Header="Exit" Click="MenuItemExit" Foreground="#2d2d30">
                         <MenuItem.Icon>
                             <Viewbox Width="16" Height="16" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
                                 <Rectangle Width="16" Height="16">
@@ -126,7 +126,7 @@
                     </MenuItem>
                 </MenuItem>
                 <MenuItem Header="Profile" FontSize="16">
-                    <MenuItem Header="New Profile" Click="ButtonAddNewProfile_Click">
+                    <MenuItem Header="New Profile" Click="ButtonAddNewProfile_Click" Foreground="#2d2d30">
                         <MenuItem.Icon>
                             <Viewbox Width="16 " Height="16" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:System="clr-namespace:System;assembly=mscorlib">
                                 <Rectangle Width="16 " Height="16">
@@ -152,7 +152,7 @@
                             </Viewbox>
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="Rename Profile" Click="ButtonRenameProfile_Click">
+                    <MenuItem Header="Rename Profile" Click="ButtonRenameProfile_Click" Foreground="#2d2d30">
                         <MenuItem.Icon>
                             <Viewbox Width="16 " Height="16" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:System="clr-namespace:System;assembly=mscorlib">
                                 <Rectangle Width="16 " Height="16">
@@ -187,7 +187,7 @@
                             </Viewbox>
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="Delete Profile" Click="ButtonDeleteProfile_Click">
+                    <MenuItem Header="Delete Profile" Click="ButtonDeleteProfile_Click" Foreground="#2d2d30">
                         <MenuItem.Icon>
                             <Viewbox Width="16 " Height="16" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:System="clr-namespace:System;assembly=mscorlib">
                                 <Rectangle Width="16 " Height="16">
@@ -216,7 +216,7 @@
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator></Separator>
-                    <MenuItem Header="Export csv/txt" Click="ButtonExportProfile_Click">
+                    <MenuItem Header="Export csv/txt" Click="ButtonExportProfile_Click" Foreground="#2d2d30">
                         <MenuItem.Icon>
                             <Viewbox Width="16" Height="16" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
                                 <Rectangle Width="16" Height="16">
@@ -240,7 +240,7 @@
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator></Separator>
-                    <MenuItem Header="Open profile folder" Click="ButtonOpenProfileFolder_Click">
+                    <MenuItem Header="Open profile folder" Click="ButtonOpenProfileFolder_Click" Foreground="#2d2d30">
                         <MenuItem.Icon>
                             <Viewbox Width="16 " Height="16" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:System="clr-namespace:System;assembly=mscorlib">
                                 <Rectangle Width="16 " Height="16">
@@ -273,23 +273,23 @@
                     </MenuItem>
                 </MenuItem>
                 <MenuItem Header="_View" FontSize="16">
-                    <MenuItem x:Name="ViewStatusPing" Header="Ping" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" IsChecked="True"></MenuItem>
-                    <MenuItem x:Name="ViewIpAddress" Header="IpAddress" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" IsChecked="True"></MenuItem>
-                    <MenuItem x:Name="ViewDevice" Header="Device" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" IsChecked="True"></MenuItem>
-                    <MenuItem x:Name="ViewDescription" Header="Description" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" IsChecked="True"></MenuItem>
-                    <MenuItem x:Name="ViewGroup" Header="Group" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" IsChecked="True"></MenuItem>
-                    <MenuItem x:Name="ViewUser" Header="User" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" IsChecked="True"></MenuItem>
-                    <MenuItem x:Name="ViewPass" Header="Pass" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" IsChecked="True"></MenuItem>
-                    <MenuItem x:Name="ViewMacAddress" Header="MAC Address" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" IsChecked="True"></MenuItem>
-                    <MenuItem x:Name="ViewNotes" Header="Notes" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" IsChecked="True"></MenuItem>
-                    <MenuItem x:Name="ViewCustomArg1" Header="CustomArg1" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" IsChecked="True"></MenuItem>
-                    <MenuItem x:Name="ViewCustomArg2" Header="CustomArg2" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" IsChecked="True"></MenuItem>
-                    <MenuItem x:Name="ViewCustomArg3" Header="CustomArg3" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" IsChecked="True"></MenuItem>
-                    <MenuItem x:Name="ViewLastPing" Header="LastPing" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" IsChecked="True"></MenuItem>
-                    <MenuItem x:Name="ViewResetColumnWidth" Header="Reset Columns Width" Click="ViewResetColumnWidth_Click"></MenuItem>
+                    <MenuItem x:Name="ViewStatusPing" Header="Ping" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" IsChecked="True" Foreground="#2d2d30"></MenuItem>
+                    <MenuItem x:Name="ViewIpAddress" Header="IpAddress" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" IsChecked="True" Foreground="#2d2d30"></MenuItem>
+                    <MenuItem x:Name="ViewDevice" Header="Device" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" IsChecked="True" Foreground="#2d2d30"></MenuItem>
+                    <MenuItem x:Name="ViewDescription" Header="Description" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" IsChecked="True" Foreground="#2d2d30"></MenuItem>
+                    <MenuItem x:Name="ViewGroup" Header="Group" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" IsChecked="True" Foreground="#2d2d30"></MenuItem>
+                    <MenuItem x:Name="ViewUser" Header="User" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" IsChecked="True" Foreground="#2d2d30"></MenuItem>
+                    <MenuItem x:Name="ViewPass" Header="Pass" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" IsChecked="True" Foreground="#2d2d30"></MenuItem>
+                    <MenuItem x:Name="ViewMacAddress" Header="MAC Address" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" IsChecked="True" Foreground="#2d2d30"></MenuItem>
+                    <MenuItem x:Name="ViewNotes" Header="Notes" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" IsChecked="True" Foreground="#2d2d30"></MenuItem>
+                    <MenuItem x:Name="ViewCustomArg1" Header="CustomArg1" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" IsChecked="True" Foreground="#2d2d30"></MenuItem>
+                    <MenuItem x:Name="ViewCustomArg2" Header="CustomArg2" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" IsChecked="True" Foreground="#2d2d30"></MenuItem>
+                    <MenuItem x:Name="ViewCustomArg3" Header="CustomArg3" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" IsChecked="True" Foreground="#2d2d30"></MenuItem>
+                    <MenuItem x:Name="ViewLastPing" Header="LastPing" IsCheckable="True" Checked="changeColumnVisibility" Unchecked="changeColumnVisibility" IsChecked="True" Foreground="#2d2d30"></MenuItem>
+                    <MenuItem x:Name="ViewResetColumnWidth" Header="Reset Columns Width" Click="ViewResetColumnWidth_Click" Foreground="#2d2d30"></MenuItem>
                 </MenuItem>
                 <MenuItem Header="_Info" FontSize="16">
-                    <MenuItem x:Name="WindowMenu_GuidaPDF"  Header="Manual" Click="WindowMenu_GuidaPDF_Click">
+                    <MenuItem x:Name="WindowMenu_GuidaPDF"  Header="Manual" Click="WindowMenu_GuidaPDF_Click" Foreground="#2d2d30">
                         <MenuItem.Icon>
                             <Viewbox Width="16" Height="16" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
                                 <Rectangle Width="16" Height="16">
@@ -310,7 +310,7 @@
                             </Viewbox>
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem x:Name="WindowMenu_Info"  Header="Info" Click="WindowMenu_Info_Click">
+                    <MenuItem x:Name="WindowMenu_Info"  Header="Info" Click="WindowMenu_Info_Click" Foreground="#2d2d30">
                         <MenuItem.Icon>
                             <Viewbox Width="16" Height="16" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
                                 <Rectangle Width="16" Height="16">
@@ -335,11 +335,11 @@
                 </MenuItem>
             </Menu>
         </DockPanel>
-        <Label Content="Profile:" HorizontalAlignment="Right" Margin="0,12,348,0" VerticalAlignment="Top" FontSize="16" Grid.RowSpan="2"/>
+        <Label x:Name="LabelHomeProfile" Content="Profile:" HorizontalAlignment="Right" Margin="0,12,348,0" VerticalAlignment="Top" FontSize="16" Grid.RowSpan="2"/>
         <ComboBox x:Name="ComboBoxProfileSelected" HorizontalAlignment="Right" Margin="0,14,49,0" VerticalAlignment="Top" Width="294" FontSize="16" SelectionChanged="ComboBoxProfileSelected_SelectionChanged" Grid.RowSpan="2"/>
         <TabControl x:Name="TabControlGenerale" Margin="10,5,9,10" Grid.Row="1" SelectionChanged="TabControlGenerale_SelectionChanged" >
             <TabItem Header="Device List" FontSize="14">
-                <Grid Background="#FFE5E5E5">
+                <Grid>
                     <DataGrid x:Name="DataGridListaIp" Margin="10,10,10,65" AutoGenerateColumns="False" SelectionChanged="DataGridListaIp_SelectionChanged" SelectionMode="Single" FontSize="14" FrozenColumnCount = "2" IsTextSearchEnabled="True" TextSearch.TextPath="PuntoVendita">
                         <DataGrid.Columns>
                             <DataGridTextColumn x:Name="ColumnStatusPing" Header="Ping" Binding="{Binding StatusPing}" Width="100" IsReadOnly="True">
@@ -348,6 +348,11 @@
                                         <Setter Property="Background" Value="{Binding ColorPing}"/>
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
+                                <DataGridTextColumn.CellStyle>
+                                    <Style TargetType="{x:Type DataGridCell}">
+                                        <Setter Property="BorderThickness" Value="1"/>
+                                    </Style>
+                                </DataGridTextColumn.CellStyle>
                             </DataGridTextColumn>
                             <DataGridTextColumn x:Name="ColumnIpAddress" Header="IpAddress" Binding="{Binding IpAddress}" Width="100"/>
                             <DataGridTextColumn x:Name="ColumnDevice" Header="Device" Binding="{Binding Device}" Width="100"/>
@@ -366,6 +371,11 @@
                                         <Setter Property="Background" Value="{Binding ColorLastPing}"/>
                                     </Style>
                                 </DataGridTextColumn.ElementStyle>
+                                <DataGridTextColumn.CellStyle>
+                                    <Style TargetType="{x:Type DataGridCell}">
+                                        <Setter Property="BorderThickness" Value="1"/>
+                                    </Style>
+                                </DataGridTextColumn.CellStyle>
                             </DataGridTextColumn>
                         </DataGrid.Columns>
                     </DataGrid>
@@ -566,10 +576,10 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Selected IP" FontSize="14">
-                <Grid Background="#FFE5E5E5">
-                    <Label Content="DEVICE:" HorizontalAlignment="Left" Margin="15,20,0,0" VerticalAlignment="Top" FontSize="14" Background="White"/>
+                <Grid>
+                    <Label x:Name="LabelSelected1" Content="DEVICE:" HorizontalAlignment="Left" Margin="15,20,0,0" VerticalAlignment="Top" FontSize="14" Background="White"/>
                     <Label x:Name="LabelIpDevice" Content="..." HorizontalAlignment="Left" Margin="94,20,0,0" VerticalAlignment="Top" Width="183" FontSize="14" Background="White"/>
-                    <Label Content="IP DEVICE" HorizontalAlignment="Left" Margin="15,73,0,0" VerticalAlignment="Top" FontSize="14" Width="141">
+                    <Label x:Name="LabelSelected2" Content="IP DEVICE" HorizontalAlignment="Left" Margin="15,73,0,0" VerticalAlignment="Top" FontSize="14" Width="141">
                         <Label.Background>
                             <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.WindowColorKey}}"/>
                         </Label.Background>
@@ -655,7 +665,7 @@
                     </Button>
                     <TextBox x:Name="TextBoxIpAddress" HorizontalAlignment="Left" Height="29" Margin="164,73,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="161" IsReadOnly="True"/>
                     <TextBox x:Name="TextBoxMacAddress" HorizontalAlignment="Left" Height="29" Margin="164,107,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="161" IsReadOnly="True"/>
-                    <Label Content="MAC ADDRESS" HorizontalAlignment="Left" Margin="15,107,0,0" VerticalAlignment="Top" FontSize="14" Width="141">
+                    <Label x:Name="LabelSelected3" Content="MAC ADDRESS" HorizontalAlignment="Left" Margin="15,107,0,0" VerticalAlignment="Top" FontSize="14" Width="141">
                         <Label.Background>
                             <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.WindowColorKey}}"/>
                         </Label.Background>
@@ -777,18 +787,18 @@
                             </Viewbox>
                         </StackPanel>
                     </Button>
-                    <Label Content="NOTES:" HorizontalAlignment="Left" Margin="15,277,0,0" VerticalAlignment="Top" FontSize="14" Background="White"/>
+                    <Label x:Name="LabelSelected5" Content="NOTES:" HorizontalAlignment="Left" Margin="15,277,0,0" VerticalAlignment="Top" FontSize="14" Background="White"/>
                     <RichTextBox x:Name="RichTextBoxNotes" Margin="15,311,10,10" IsReadOnly="False" TextChanged="RichTextBoxNotes_TextChanged" Block.LineHeight="1">
                         <FlowDocument/>
                     </RichTextBox>
-                    <Label Content="DESCRIPTION:" HorizontalAlignment="Left" Margin="15,141,0,0" VerticalAlignment="Top" FontSize="14" Background="White" Width="141"/>
+                    <Label x:Name="LabelSelected4" Content="DESCRIPTION:" HorizontalAlignment="Left" Margin="15,141,0,0" VerticalAlignment="Top" FontSize="14" Background="White" Width="141"/>
                     <RichTextBox x:Name="RichTextBoxDescription" Margin="15,175,10,0" IsReadOnly="False" Height="97" VerticalAlignment="Top" TextChanged="RichTextBoxDescription_TextChanged" Block.LineHeight="1">
                         <FlowDocument/>
                     </RichTextBox>
                 </Grid>
             </TabItem>
             <TabItem Header="Script" FontSize="14">
-                <Grid Background="#FFE5E5E5">
+                <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"></RowDefinition>
                         <RowDefinition Height="2*"></RowDefinition>
@@ -860,42 +870,42 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Settings" FontSize="14">
-                <Grid Background="#FFE5E5E5">
+                <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <Label Content="Path Browser:" HorizontalAlignment="Left" Margin="14,19,0,0" VerticalAlignment="Top" FontSize="14" Height="29" Width="93"/>
+                    <Label x:Name="LabelSettings1" Content="Path Browser:" HorizontalAlignment="Left" Margin="14,19,0,0" VerticalAlignment="Top" FontSize="14" Height="29" Width="93"/>
                     <TextBox x:Name="TextBoxPathBrowser" Height="23" Margin="108,22,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" HorizontalAlignment="Left" Width="460" TabIndex="0"/>
                     <CheckBox x:Name="CheckBoxFixedPositionMainWindow" Content="Fixed position main window" HorizontalAlignment="Left" Margin="14,71,0,0" VerticalAlignment="Top" Height="18" Width="192" TabIndex="53"/>
-                    <Label Content="Device count:" HorizontalAlignment="Left" Margin="578,60,0,0" VerticalAlignment="Top" Height="29" Width="93"/>
-                    <Label x:Name="LabelDeviceCount" Content="0" HorizontalAlignment="Left" Margin="675,60,0,0" VerticalAlignment="Top" Width="108" Height="29"/>
+                    <Label x:Name="LabelSettings4" Content="Device count:" HorizontalAlignment="Left" Margin="608,65,0,0" VerticalAlignment="Top" Height="29" Width="93"/>
+                    <Label x:Name="LabelDeviceCount" Content="0" HorizontalAlignment="Left" Margin="705,65,0,0" VerticalAlignment="Top" Width="108" Height="29"/>
                     <TextBox x:Name="TextBoxTimeout" HorizontalAlignment="Left" Height="23" Margin="372,68,0,0" TextWrapping="Wrap" Text="1000" VerticalAlignment="Top" Width="62" RenderTransformOrigin="0.475,1.522" TextChanged="TextBoxTimeout_TextChanged" TabIndex="50"/>
-                    <Label Content="Timeout ping:" HorizontalAlignment="Left" Margin="241,65,0,0" VerticalAlignment="Top" FontSize="14" Background="{x:Null}" Height="29" Width="96"/>
-                    <Label Content="ms" HorizontalAlignment="Left" Margin="439,65,0,0" VerticalAlignment="Top" FontSize="14" Background="{x:Null}" Height="29" Width="28"/>
-                    <Label Content="App 1:" HorizontalAlignment="Left" Margin="10,147,0,0" VerticalAlignment="Top" FontSize="14" Height="29" Width="50"/>
+                    <Label x:Name="LabelSettings2" Content="Timeout ping:" HorizontalAlignment="Left" Margin="241,65,0,0" VerticalAlignment="Top" FontSize="14" Background="{x:Null}" Height="29" Width="96"/>
+                    <Label x:Name="LabelUnit1" Content="ms" HorizontalAlignment="Left" Margin="439,65,0,0" VerticalAlignment="Top" FontSize="14" Background="{x:Null}" Height="29" Width="28"/>
+                    <Label x:Name="LabelAppPath1" Content="App 1:" HorizontalAlignment="Left" Margin="10,147,0,0" VerticalAlignment="Top" FontSize="14" Height="29" Width="50"/>
                     <TextBox x:Name="TextBoxPathApp1" Height="23" Margin="170,150,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" HorizontalAlignment="Left" Width="398" TextChanged="TextBoxPathApp1_TextChanged" Text="Path to application to launch" TabIndex="3"/>
-                    <Label Content="App 2:" HorizontalAlignment="Left" Margin="10,203,0,0" VerticalAlignment="Top" FontSize="14" Height="29" Width="50"/>
+                    <Label x:Name="LabelAppPath2" Content="App 2:" HorizontalAlignment="Left" Margin="10,203,0,0" VerticalAlignment="Top" FontSize="14" Height="29" Width="50"/>
                     <TextBox x:Name="TextBoxPathApp2" Height="23" Margin="170,206,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" HorizontalAlignment="Left" Width="398" TextChanged="TextBoxPathApp2_TextChanged" TabIndex="9"/>
-                    <Label Content="App 3:" HorizontalAlignment="Left" Margin="10,259,0,0" VerticalAlignment="Top" FontSize="14" Height="29" Width="50"/>
+                    <Label x:Name="LabelAppPath3" Content="App 3:" HorizontalAlignment="Left" Margin="10,259,0,0" VerticalAlignment="Top" FontSize="14" Height="29" Width="50"/>
                     <TextBox x:Name="TextBoxPathApp3" Height="23" Margin="170,262,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" HorizontalAlignment="Left" Width="398" TextChanged="TextBoxPathApp3_TextChanged" TabIndex="15"/>
                     <TextBox x:Name="TextBoxPathApp1_Arg0" Height="23" Margin="573,150,41,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" Text="Arguments to pass, for example &lt;IpAddress&gt;" TextChanged="TextBoxPathApp1_Arg0_TextChanged" TabIndex="4"/>
                     <TextBox x:Name="TextBoxPathApp2_Arg0" Height="23" Margin="573,206,41,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" TextChanged="TextBoxPathApp2_Arg0_TextChanged" TabIndex="10"/>
                     <TextBox x:Name="TextBoxPathApp3_Arg0" Height="23" Margin="573,262,41,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" TextChanged="TextBoxPathApp3_Arg0_TextChanged" TabIndex="16"/>
                     <TextBox x:Name="TextBoxPathBrowser_Arg0" Height="23" Margin="573,22,41,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" TabIndex="1"/>
-                    <Label Content="Keywords available:" HorizontalAlignment="Left" Margin="14,606,0,0" VerticalAlignment="Top" FontSize="14" Height="29" Width="151"/>
-                    <Label Content="&lt;IpAddress&gt; &lt;Device&gt; &lt;User&gt; &lt;Pass&gt; &lt;MacAddress&gt; &lt;CustomArg1&gt; &lt;CustomArg2&gt; &lt;CustomArg3&gt;" Margin="12,632,19,0" VerticalAlignment="Top" FontSize="14" Height="29"/>
+                    <Label x:Name="LabelSettings6" Content="Keywords available:" HorizontalAlignment="Left" Margin="14,606,0,0" VerticalAlignment="Top" FontSize="14" Height="29" Width="151"/>
+                    <Label x:Name="LabelSettings7" Content="&lt;IpAddress&gt; &lt;Device&gt; &lt;User&gt; &lt;Pass&gt; &lt;MacAddress&gt; &lt;CustomArg1&gt; &lt;CustomArg2&gt; &lt;CustomArg3&gt;" Margin="12,632,19,0" VerticalAlignment="Top" FontSize="14" Height="29"/>
                     <TextBox x:Name="TextBoxLabelApp1" HorizontalAlignment="Left" Height="23" Margin="65,150,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" TextChanged="TextBoxLabelApp1_TextChanged" Text="App1" TabIndex="2"/>
                     <TextBox x:Name="TextBoxLabelApp2" HorizontalAlignment="Left" Height="23" Margin="65,206,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" TextChanged="TextBoxLabelApp2_TextChanged" Text="App2" TabIndex="8"/>
                     <TextBox x:Name="TextBoxLabelApp3" HorizontalAlignment="Left" Height="23" Margin="65,262,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" TextChanged="TextBoxLabelApp3_TextChanged" Text="App3" TabIndex="14"/>
                     <TextBox x:Name="TextBoxTimeoutLastPing" HorizontalAlignment="Left" Height="23" Margin="372,97,0,0" TextWrapping="Wrap" Text="60" VerticalAlignment="Top" Width="62" RenderTransformOrigin="0.475,1.522" TextChanged="TextBoxTimeoutLastPing_TextChanged" TabIndex="51"/>
-                    <Label Content="Timeout last ping:" HorizontalAlignment="Left" Margin="241,94,0,0" VerticalAlignment="Top" FontSize="14" Background="{x:Null}" Height="29" Width="121"/>
-                    <Label Content="s" HorizontalAlignment="Left" Margin="439,94,0,0" VerticalAlignment="Top" FontSize="14" Background="{x:Null}" Height="29" Width="16"/>
+                    <Label x:Name="LabelSettings3" Content="Timeout last ping:" HorizontalAlignment="Left" Margin="241,94,0,0" VerticalAlignment="Top" FontSize="14" Background="{x:Null}" Height="29" Width="121"/>
+                    <Label x:Name="LabelUnit2" Content="s" HorizontalAlignment="Left" Margin="439,94,0,0" VerticalAlignment="Top" FontSize="14" Background="{x:Null}" Height="29" Width="16"/>
                     <CheckBox x:Name="CheckBoxCloseConsoleAtStartup" Content="Close console at startup" HorizontalAlignment="Left" Margin="14,102,0,0" VerticalAlignment="Top" Height="18" Width="192" TabIndex="54"/>
-                    <Label Content="App 4:" HorizontalAlignment="Left" Margin="10,315,0,0" VerticalAlignment="Top" FontSize="14" Height="29" Width="50"/>
+                    <Label x:Name="LabelAppPath4" Content="App 4:" HorizontalAlignment="Left" Margin="10,315,0,0" VerticalAlignment="Top" FontSize="14" Height="29" Width="50"/>
                     <TextBox x:Name="TextBoxPathApp4" Height="23" Margin="170,318,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" HorizontalAlignment="Left" Width="398" TextChanged="TextBoxPathApp4_TextChanged" TabIndex="21"/>
-                    <Label Content="App 5:" HorizontalAlignment="Left" Margin="10,371,0,0" VerticalAlignment="Top" FontSize="14" Height="29" Width="50"/>
+                    <Label x:Name="LabelAppPath5" Content="App 5:" HorizontalAlignment="Left" Margin="10,371,0,0" VerticalAlignment="Top" FontSize="14" Height="29" Width="50"/>
                     <TextBox x:Name="TextBoxPathApp5" Height="23" Margin="170,374,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" HorizontalAlignment="Left" Width="398" TextChanged="TextBoxPathApp5_TextChanged" TabIndex="27"/>
-                    <Label Content="App 6:" HorizontalAlignment="Left" Margin="10,427,0,0" VerticalAlignment="Top" FontSize="14" Height="29" Width="50"/>
+                    <Label x:Name="LabelAppPath6" Content="App 6:" HorizontalAlignment="Left" Margin="10,427,0,0" VerticalAlignment="Top" FontSize="14" Height="29" Width="50"/>
                     <TextBox x:Name="TextBoxPathApp6" Height="23" Margin="170,430,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" HorizontalAlignment="Left" Width="398" TextChanged="TextBoxPathApp6_TextChanged" TabIndex="33"/>
                     <TextBox x:Name="TextBoxPathApp4_Arg0" Height="23" Margin="573,318,41,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" TextChanged="TextBoxPathApp4_Arg0_TextChanged" TabIndex="22"/>
                     <TextBox x:Name="TextBoxPathApp5_Arg0" Height="23" Margin="573,374,41,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" TextChanged="TextBoxPathApp5_Arg0_TextChanged" TabIndex="28"/>
@@ -904,13 +914,13 @@
                     <TextBox x:Name="TextBoxLabelApp5" HorizontalAlignment="Left" Height="23" Margin="65,374,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" TextChanged="TextBoxLabelApp5_TextChanged" Text="App5" TabIndex="26"/>
                     <TextBox x:Name="TextBoxLabelApp6" HorizontalAlignment="Left" Height="23" Margin="65,430,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" TextChanged="TextBoxLabelApp6_TextChanged" Text="App6" TabIndex="32"/>
                     <TextBox x:Name="TextBoxDelayBetweenLoops" HorizontalAlignment="Left" Height="23" Margin="677,97,0,0" TextWrapping="Wrap" Text="500" VerticalAlignment="Top" Width="62" RenderTransformOrigin="0.475,1.522" TextChanged="TextBoxDelayBetweenLoops_TextChanged" TabIndex="52"/>
-                    <Label Content="Delay between polling cycle:" HorizontalAlignment="Left" Margin="484,94,0,0" VerticalAlignment="Top" FontSize="14" Background="{x:Null}" Height="29" Width="187"/>
-                    <Label Content="ms" HorizontalAlignment="Left" Margin="739,94,0,0" VerticalAlignment="Top" FontSize="14" Background="{x:Null}" Height="29" Width="33"/>
-                    <Label Content="App 7:" HorizontalAlignment="Left" Margin="10,483,0,0" VerticalAlignment="Top" FontSize="14" Height="29" Width="50"/>
+                    <Label x:Name="LabelSettings5" Content="Delay between polling cycle:" HorizontalAlignment="Left" Margin="484,94,0,0" VerticalAlignment="Top" FontSize="14" Background="{x:Null}" Height="29" Width="187"/>
+                    <Label x:Name="LabelUnit3" Content="ms" HorizontalAlignment="Left" Margin="739,94,0,0" VerticalAlignment="Top" FontSize="14" Background="{x:Null}" Height="29" Width="33"/>
+                    <Label x:Name="LabelAppPath7" Content="App 7:" HorizontalAlignment="Left" Margin="10,483,0,0" VerticalAlignment="Top" FontSize="14" Height="29" Width="50"/>
                     <TextBox x:Name="TextBoxPathApp7" Height="23" Margin="170,486,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" HorizontalAlignment="Left" Width="398" TextChanged="TextBoxPathApp7_TextChanged" TabIndex="39"/>
                     <TextBox x:Name="TextBoxPathApp7_Arg0" Height="23" Margin="573,486,41,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" TextChanged="TextBoxPathApp7_Arg0_TextChanged" TabIndex="40"/>
                     <TextBox x:Name="TextBoxLabelApp7" HorizontalAlignment="Left" Height="23" Margin="65,486,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" TextChanged="TextBoxLabelApp7_TextChanged" Text="App7" TabIndex="38"/>
-                    <Label Content="App 8:" HorizontalAlignment="Left" Margin="10,540,0,0" VerticalAlignment="Top" FontSize="14" Height="29" Width="50"/>
+                    <Label x:Name="LabelAppPath8" Content="App 8:" HorizontalAlignment="Left" Margin="10,540,0,0" VerticalAlignment="Top" FontSize="14" Height="29" Width="50"/>
                     <TextBox x:Name="TextBoxPathApp8" Height="23" Margin="170,544,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" HorizontalAlignment="Left" Width="398" TextChanged="TextBoxPathApp8_TextChanged" TabIndex="45"/>
                     <TextBox x:Name="TextBoxPathApp8_Arg0" Height="23" Margin="573,544,41,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" TextChanged="TextBoxPathApp8_Arg0_TextChanged" TabIndex="46"/>
                     <TextBox x:Name="TextBoxLabelApp8" HorizontalAlignment="Left" Height="23" Margin="65,544,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" TextChanged="TextBoxLabelApp8_TextChanged" Text="App8" TabIndex="44"/>
@@ -942,6 +952,7 @@
                     <TextBox x:Name="TextBoxPathApp8_B" Height="23" Margin="170,572,0,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" HorizontalAlignment="Left" Width="398" TextChanged="TextBoxPathApp8_B_TextChanged" TabIndex="48"/>
                     <TextBox x:Name="TextBoxPathApp8_Arg0_B" Height="23" Margin="573,572,41,0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14" TextChanged="TextBoxPathApp8_Arg0_B_TextChanged" TabIndex="69"/>
                     <TextBox x:Name="TextBoxLabelApp8_B" HorizontalAlignment="Left" Height="23" Margin="65,572,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="100" Text="App8" TextChanged="TextBoxLabelApp8_B_TextChanged" TabIndex="47"/>
+                    <CheckBox x:Name="CheckBoxDarkMode" Content="Dark mode" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="489,72,0,0" Checked="CheckBoxDarkMode_Checked" Unchecked="CheckBoxDarkMode_Checked"/>
                 </Grid>
             </TabItem>
         </TabControl>
