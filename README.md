@@ -3,8 +3,8 @@ C#/WPF client useful to keep track of network devices, if they are online or not
 
 ## Release
 
-### v1.5
-https://github.com/Fedex1515/Client_PING/releases/download/1.5/Client_PING_v1.5.zip
+### v1.6
+https://github.com/Fedex1515/Client_PING/releases/download/1.6/Client_PING_v1.6.zip
 
 Added dark mode since v1.5
 
