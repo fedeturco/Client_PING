@@ -105,20 +105,36 @@ namespace Client_PING
         public string[,] args = new string[2,8];
         public bool init = false;
 
-        // f1f1f1
-        // 0A0A0A
+        bool darkMode = false;
+
+        // Dark mode
         public SolidColorBrush ForeGroundDark = new SolidColorBrush(Color.FromArgb(255, (byte)241, (byte)241, (byte)241));
-        public SolidColorBrush ForeGroundLight = new SolidColorBrush(Color.FromArgb(255, (byte)10, (byte)10, (byte)10));
-
-        // 2D2D30
-        // FFE5E5E5
         public SolidColorBrush BackGroundDark = new SolidColorBrush(Color.FromArgb(255, (byte)45, (byte)45, (byte)48));
-        public SolidColorBrush BackGroundLight = new SolidColorBrush(Color.FromArgb(255, (byte)229, (byte)229, (byte)229));
 
+        public string ForeGroundDarkStr;
+        public string BackGroundDarkStr;
+
+        // Light mode
+        public SolidColorBrush ForeGroundLight = new SolidColorBrush(Color.FromArgb(255, (byte)10, (byte)10, (byte)10));
+        public SolidColorBrush BackGroundLight = new SolidColorBrush(Color.FromArgb(255, (byte)229, (byte)229, (byte)229));
+        public SolidColorBrush BackGroundLight2 = new SolidColorBrush(Color.FromArgb(255, (byte)255, (byte)255, (byte)255));
+
+        public string ForeGroundLightStr;
+        public string BackGroundLightStr;
+        public string BackGroundLight2Str;
 
         public MainWindow()
         {
             InitializeComponent();
+
+            // Applico la grafica di default (light mode)
+            CheckBoxDarkMode_Checked(null, null);
+
+            ForeGroundDarkStr = ForeGroundDark.ToString();
+            BackGroundDarkStr = BackGroundDark.ToString();
+            ForeGroundLightStr = ForeGroundLight.ToString();
+            BackGroundLightStr = BackGroundLight.ToString();
+            BackGroundLight2Str = BackGroundLight2.ToString();
         }
 
         private void WindowMenu_GuidaPDF_Click(object sender, RoutedEventArgs e)
@@ -1218,7 +1234,8 @@ namespace Client_PING
             {
                 foreach (IPEntry ipTmp in ListDevices)
                 {
-                    ipTmp.ColorPing = Brushes.White.ToString();
+                    ipTmp.ColorPing = darkMode ? BackGroundDarkStr : Brushes.White.ToString();
+                    ipTmp.ColorForegroundPing = darkMode ? ForeGroundDarkStr : ForeGroundLightStr;
                 }
 
                 this.Dispatcher.Invoke((Action)delegate
@@ -1295,12 +1312,14 @@ namespace Client_PING
                         {
                             ipTmp.StatusPing = "Timeout";
                             ipTmp.ColorPing = Brushes.Red.ToString();
+                            ipTmp.ColorForegroundPing = Brushes.White.ToString();
                         }
                         else
                         {
                             ipTmp.StatusPing = "OK - " + RispostaPING.RoundtripTime + " ms";
                             ipTmp.LastPing = DateTime.Now.ToString();
                             ipTmp.ColorPing = Brushes.Lime.ToString();
+                            ipTmp.ColorForegroundPing = Brushes.Black.ToString();
                         }
                     }
                     else
@@ -1308,6 +1327,7 @@ namespace Client_PING
                         ipTmp.StatusPing = "OK - " + RispostaPING.RoundtripTime + " ms";
                         ipTmp.LastPing = DateTime.Now.ToString();
                         ipTmp.ColorPing = Brushes.Lime.ToString();
+                        ipTmp.ColorForegroundPing = Brushes.Black.ToString();
                     }
 
                     try
@@ -1317,10 +1337,12 @@ namespace Client_PING
                         if (diff.TotalSeconds > timeoutLastPing)
                         {
                             ipTmp.ColorLastPing = Brushes.Red.ToString();
+                            ipTmp.ColorForegroundLastPing = Brushes.White.ToString();
                         }
                         else
                         {
                             ipTmp.ColorLastPing = Brushes.Lime.ToString();
+                            ipTmp.ColorForegroundLastPing = Brushes.Black.ToString();
                         }
                     }
                     catch(Exception err)
@@ -2629,23 +2651,27 @@ namespace Client_PING
 
         private void CheckBoxDarkMode_Checked(object sender, RoutedEventArgs e)
         {
-            MenuBar.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            MenuBar.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            darkMode = (bool)CheckBoxDarkMode.IsChecked;
 
-            GridMain.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            MenuBar.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
+            MenuBar.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
+
+            GridMain.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
 
             TabControlGenerale.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TabControlGenerale.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TabControlGenerale.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
+
+            Tab1Grid.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            Tab2Grid.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            Tab3Grid.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            Tab4Grid.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
 
             CheckBoxUseThreadsForPing.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
             CheckBoxPinWIndow.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
             LabelCurrentIp.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
 
             //ComboBoxProfileSelected.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            ComboBoxProfileSelected.Foreground = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
-
-            TabControlGenerale.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TabControlGenerale.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            ComboBoxProfileSelected.Foreground = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : ForeGroundLight;
 
             // DataGridListaIp.Foreground = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
             DataGridListaIp.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
@@ -2659,7 +2685,7 @@ namespace Client_PING
             CheckBoxDarkMode.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
             //CheckBoxDarkMode.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
 
-            ColumnStatusPing.Foreground = BackGroundDark;
+            //ColumnStatusPing.Foreground = BackGroundDark;
             //ColumnStatusPing.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
 
             ColumnIpAddress.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
@@ -2695,7 +2721,7 @@ namespace Client_PING
             ColumnCustomArg3.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
             //ColumnCustomArg3.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
 
-            ColumnLastPing.Foreground = BackGroundDark;
+            //ColumnLastPing.Foreground = BackGroundDark;
             //ColumnLastPing.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
 
             LabelDeviceCount.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
@@ -2741,127 +2767,127 @@ namespace Client_PING
             LabelUnit3.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
 
             TextBoxPathBrowser.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxPathBrowser.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxPathBrowser.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
             TextBoxPathBrowser_Arg0.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxPathBrowser_Arg0.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxPathBrowser_Arg0.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
 
             TextBoxLabelApp1.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxLabelApp1.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxLabelApp1.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
             TextBoxPathApp1.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxPathApp1.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxPathApp1.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
             TextBoxPathApp1_Arg0.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxPathApp1_Arg0.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxPathApp1_Arg0.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
 
             TextBoxLabelApp1_B.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxLabelApp1_B.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxLabelApp1_B.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
             TextBoxPathApp1_B.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxPathApp1_B.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxPathApp1_B.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
             TextBoxPathApp1_Arg0_B.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxPathApp1_Arg0_B.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxPathApp1_Arg0_B.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
 
             TextBoxLabelApp2.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxLabelApp2.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxLabelApp2.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
             TextBoxPathApp2.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxPathApp2.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxPathApp2.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
             TextBoxPathApp2_Arg0.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxPathApp2_Arg0.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxPathApp2_Arg0.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
 
             TextBoxLabelApp2_B.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxLabelApp2_B.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxLabelApp2_B.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
             TextBoxPathApp2_B.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxPathApp2_B.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxPathApp2_B.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
             TextBoxPathApp2_Arg0_B.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxPathApp2_Arg0_B.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxPathApp2_Arg0_B.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
 
             TextBoxLabelApp3.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxLabelApp3.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxLabelApp3.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
             TextBoxPathApp3.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxPathApp3.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxPathApp3.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
             TextBoxPathApp3_Arg0.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxPathApp3_Arg0.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxPathApp3_Arg0.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
 
             TextBoxLabelApp3_B.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxLabelApp3_B.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxLabelApp3_B.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
             TextBoxPathApp3_B.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxPathApp3_B.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxPathApp3_B.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
             TextBoxPathApp3_Arg0_B.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxPathApp3_Arg0_B.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxPathApp3_Arg0_B.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
 
             TextBoxLabelApp4.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxLabelApp4.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxLabelApp4.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
             TextBoxPathApp4.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxPathApp4.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxPathApp4.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
             TextBoxPathApp4_Arg0.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxPathApp4_Arg0.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxPathApp4_Arg0.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
 
             TextBoxLabelApp4_B.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxLabelApp4_B.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxLabelApp4_B.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
             TextBoxPathApp4_B.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxPathApp4_B.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxPathApp4_B.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
             TextBoxPathApp4_Arg0_B.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxPathApp4_Arg0_B.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxPathApp4_Arg0_B.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
 
             TextBoxLabelApp5.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxLabelApp5.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxLabelApp5.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
             TextBoxPathApp5.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxPathApp5.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxPathApp5.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
             TextBoxPathApp5_Arg0.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxPathApp5_Arg0.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxPathApp5_Arg0.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
 
             TextBoxLabelApp5_B.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxLabelApp5_B.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxLabelApp5_B.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
             TextBoxPathApp5_B.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxPathApp5_B.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxPathApp5_B.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
             TextBoxPathApp5_Arg0_B.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxPathApp5_Arg0_B.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxPathApp5_Arg0_B.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
 
             TextBoxLabelApp6.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxLabelApp6.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxLabelApp6.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
             TextBoxPathApp6.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxPathApp6.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxPathApp6.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
             TextBoxPathApp6_Arg0.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxPathApp6_Arg0.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxPathApp6_Arg0.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
 
             TextBoxLabelApp6_B.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxLabelApp6_B.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxLabelApp6_B.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
             TextBoxPathApp6_B.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxPathApp6_B.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxPathApp6_B.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
             TextBoxPathApp6_Arg0_B.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxPathApp6_Arg0_B.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxPathApp6_Arg0_B.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
 
             TextBoxLabelApp7.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxLabelApp7.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxLabelApp7.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
             TextBoxPathApp7.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxPathApp7.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxPathApp7.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
             TextBoxPathApp7_Arg0.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxPathApp7_Arg0.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxPathApp7_Arg0.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
 
             TextBoxLabelApp7_B.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxLabelApp7_B.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxLabelApp7_B.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
             TextBoxPathApp7_B.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxPathApp7_B.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxPathApp7_B.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
             TextBoxPathApp7_Arg0_B.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxPathApp7_Arg0_B.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxPathApp7_Arg0_B.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
 
             TextBoxLabelApp8.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxLabelApp8.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxLabelApp8.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
             TextBoxPathApp8.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxPathApp8.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxPathApp8.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
             TextBoxPathApp8_Arg0.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxPathApp8_Arg0.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxPathApp8_Arg0.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
 
             TextBoxLabelApp8_B.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxLabelApp8_B.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxLabelApp8_B.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
             TextBoxPathApp8_B.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxPathApp8_B.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxPathApp8_B.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
             TextBoxPathApp8_Arg0_B.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxPathApp8_Arg0_B.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxPathApp8_Arg0_B.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
 
             RichTextBoxStartScript.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            RichTextBoxStartScript.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            RichTextBoxStartScript.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
 
             RichTextBoxStopScript.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            RichTextBoxStopScript.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            RichTextBoxStopScript.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
 
             CheckboxRunStartScriptOnStart.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
             //CheckboxRunStartScriptOnStart.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
@@ -2873,76 +2899,94 @@ namespace Client_PING
             //CheckboxRunStopScriptAdAdmin.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
 
             LabelSelected1.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            LabelSelected1.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            LabelSelected1.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
             LabelSelected2.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            LabelSelected2.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            LabelSelected2.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
             LabelSelected3.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            LabelSelected3.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            LabelSelected3.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
             LabelSelected4.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            LabelSelected4.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            LabelSelected4.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
             LabelSelected5.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            LabelSelected5.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            LabelSelected5.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
 
             LabelIpDevice.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            LabelIpDevice.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            LabelIpDevice.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
             TextBoxIpAddress.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxIpAddress.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxIpAddress.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
             TextBoxMacAddress.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            TextBoxMacAddress.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            TextBoxMacAddress.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
             RichTextBoxDescription.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            RichTextBoxDescription.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            RichTextBoxDescription.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
             RichTextBoxNotes.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            RichTextBoxNotes.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            RichTextBoxNotes.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
 
             LabelHomeProfile.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
-            LabelHomeProfile.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            LabelHomeProfile.Background = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
 
-            Setter SetBack1 = new Setter();
-            SetBack1.Property = BorderBrushProperty;
-            SetBack1.Value = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            // BorderBrush
+            Setter SetBorderBrush = new Setter();
+            SetBorderBrush.Property = BorderBrushProperty;
+            SetBorderBrush.Value = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
 
-            Setter SetBack2 = new Setter();
-            SetBack2.Property = BackgroundProperty;
-            SetBack2.Value = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight;
+            // Background
+            Setter SetBackgroundProperty = new Setter();
+            SetBackgroundProperty.Property = BackgroundProperty;
+            SetBackgroundProperty.Value = (bool)CheckBoxDarkMode.IsChecked ? BackGroundDark : BackGroundLight2;
 
-            Setter SetBack3 = new Setter();
-            SetBack3.Property = BorderThicknessProperty;
-            SetBack3.Value = 1;
+            // I 3 stili seguenti sono uguali, tengo separati per debug
 
-            Style Cellstyle1 = new Style();
-            Cellstyle1.Setters.Add(SetBack1);
-            Cellstyle1.Setters.Add(SetBack2);
-            //Cellstyle1.Setters.Add(SetBack3);
+            // Stile custom per cella standard
+            Style CellstyleViewModeStandard = new Style();
+            CellstyleViewModeStandard.Setters.Add(SetBorderBrush);
+            CellstyleViewModeStandard.Setters.Add(SetBackgroundProperty);
 
-            ColumnLastPing.CellStyle = Cellstyle1;
-            ColumnIpAddress.CellStyle = Cellstyle1;
-            ColumnDevice.CellStyle = Cellstyle1;
-            ColumnDescription.CellStyle = Cellstyle1;
-            ColumnGroup.CellStyle = Cellstyle1;
-            ColumnUser.CellStyle = Cellstyle1;
-            ColumnPass.CellStyle = Cellstyle1;
-            ColumnMacAddress.CellStyle = Cellstyle1;
-            ColumnNotes.CellStyle = Cellstyle1;
-            ColumnCustomArg1.CellStyle = Cellstyle1;
-            ColumnCustomArg2.CellStyle = Cellstyle1;
-            ColumnCustomArg3.CellStyle = Cellstyle1;
-            ColumnStatusPing.CellStyle = Cellstyle1;
+            // Stile custom per modalita' edit
+            Style CellStyleEdtitingMode = new Style();
+            CellStyleEdtitingMode.Setters.Add(SetBorderBrush);
+            CellStyleEdtitingMode.Setters.Add(SetBackgroundProperty);
 
-            Setter SetFore = new Setter();
-            SetFore.Property = BorderBrushProperty;
-            SetFore.Value = BackGroundDark;
+            // Stile colonne ping e statusPing (background variabile)
+            Style CellstyleViewModePingColumns = new Style();
+            CellstyleViewModePingColumns.Setters.Add(SetBorderBrush);
+            CellstyleViewModePingColumns.Setters.Add(SetBackgroundProperty);
 
-            //ColumnDevice.CellStyle.Setters.Clear();
-            //ColumnDescription.CellStyle.Setters.Clear();
-            //ColumnGroup.CellStyle.Setters.Clear();
-            //ColumnUser.CellStyle.Setters.Clear();
-            //ColumnPass.CellStyle.Setters.Clear();
-            //ColumnMacAddress.CellStyle.Setters.Clear();
-            //ColumnNotes.CellStyle.Setters.Clear();
-            //ColumnCustomArg1.CellStyle.Setters.Clear();
-            //ColumnCustomArg2.CellStyle.Setters.Clear();
-            //ColumnCustomArg3.CellStyle.Setters.Clear();
-            //ColumnLastPing.CellStyle.Setters.Add(setBack);
+            ColumnLastPing.CellStyle = CellstyleViewModePingColumns;
+            ColumnStatusPing.CellStyle = CellstyleViewModePingColumns;
+
+            ColumnIpAddress.CellStyle = CellstyleViewModeStandard;
+            ColumnIpAddress.EditingElementStyle = CellStyleEdtitingMode;
+
+            ColumnDevice.CellStyle = CellstyleViewModeStandard;
+            ColumnDevice.EditingElementStyle = CellStyleEdtitingMode;
+
+            ColumnDescription.CellStyle = CellstyleViewModeStandard;
+            ColumnDescription.EditingElementStyle = CellStyleEdtitingMode;
+            
+            ColumnGroup.CellStyle = CellstyleViewModeStandard;
+            ColumnGroup.EditingElementStyle = CellStyleEdtitingMode;
+            
+            ColumnUser.CellStyle = CellstyleViewModeStandard;
+            ColumnUser.EditingElementStyle = CellStyleEdtitingMode;
+            
+            ColumnPass.CellStyle = CellstyleViewModeStandard;
+            ColumnPass.EditingElementStyle = CellStyleEdtitingMode;
+            
+            ColumnMacAddress.CellStyle = CellstyleViewModeStandard;
+            ColumnMacAddress.EditingElementStyle = CellStyleEdtitingMode;
+            
+            ColumnNotes.CellStyle = CellstyleViewModeStandard;
+            ColumnNotes.EditingElementStyle = CellStyleEdtitingMode;
+            
+            ColumnCustomArg1.CellStyle = CellstyleViewModeStandard;
+            ColumnCustomArg1.EditingElementStyle = CellStyleEdtitingMode;
+            
+            ColumnCustomArg2.CellStyle = CellstyleViewModeStandard;
+            ColumnCustomArg2.EditingElementStyle = CellStyleEdtitingMode;
+            
+            ColumnCustomArg3.CellStyle = CellstyleViewModeStandard;
+            ColumnCustomArg3.EditingElementStyle = CellStyleEdtitingMode;
+
+            DataGridListaIp.RowStyle = CellstyleViewModeStandard;
         }
     }
     public class File_IP_Config
@@ -2976,6 +3020,8 @@ namespace Client_PING
         // Hidden properties
         public string ColorPing { get; set; }
         public string ColorLastPing { get; set; }
+        public string ColorForegroundPing { get; set; }
+        public string ColorForegroundLastPing { get; set; }
 
     }
 }

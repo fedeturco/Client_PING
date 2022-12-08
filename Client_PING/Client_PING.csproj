@@ -152,5 +152,8 @@
   <ItemGroup>
     <Resource Include="Screenshots\Tab_4_Scripts.PNG" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Screenshots\Tab_1_Home_Dark.PNG" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
