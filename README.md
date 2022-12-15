@@ -41,3 +41,9 @@ You can simply add scripts to add or remove routes when you change the current p
  The device tab shows a summary of the selected device:
  
  ![alt text](https://github.com/Fedex1515/Client_PING/blob/master/Client_PING/Screenshots/Tab_2_Device.PNG?raw=true)
+ 
+ ## Dark mode:
+ 
+ Dark mode since v1.5
+ 
+ ![alt text](https://github.com/Fedex1515/Client_PING/blob/master/Client_PING/Screenshots/Tab_1_Home_Dark.PNG?raw=true)
