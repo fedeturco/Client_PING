@@ -46,6 +46,11 @@ namespace Client_PING
 
                 ButtonSaveProfile_Click(null, null);
             }
+
+            if(e.Key == Key.Escape)
+            {
+                this.Close();
+            }
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

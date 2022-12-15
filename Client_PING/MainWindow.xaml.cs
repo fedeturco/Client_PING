@@ -1574,10 +1574,13 @@ namespace Client_PING
             NewProfile window = new NewProfile("New profile", "", "Save");
             window.ShowDialog();
 
-            ComboBoxProfileSelected.Items.Add(window.profileName);
-            ComboBoxProfileSelected.SelectedValue = window.profileName;
+            if (window.profileName.Length > 0)
+            {
+                ComboBoxProfileSelected.Items.Add(window.profileName);
+                ComboBoxProfileSelected.SelectedValue = window.profileName;
 
-            ListDevices.Clear();
+                ListDevices.Clear();
+            }
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -2987,6 +2990,12 @@ namespace Client_PING
             ColumnCustomArg3.EditingElementStyle = CellStyleEdtitingMode;
 
             DataGridListaIp.RowStyle = CellstyleViewModeStandard;
+        }
+
+        private void licenseToolStripMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            License window = new License();
+            window.Show();
         }
     }
     public class File_IP_Config
