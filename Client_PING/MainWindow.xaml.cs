@@ -92,6 +92,7 @@ namespace Client_PING
         Thread ThreadPing;
         public bool useThreadsForPing = false;
         IPEntry selected = null;
+        public bool applyToAll = false;
 
         public int timeoutPing = 0;
         public int timeoutLastPing = 0;
@@ -1045,15 +1046,92 @@ namespace Client_PING
         {
             try
             {
-                if (selected != null)
+                if (applyToAll)
+                {
+                    foreach (IPEntry ip in ListDevices)
+                    {
+                        if (ip.StatusPing.IndexOf("OK") != -1)
+                        {
+                            Process p = new Process();
+
+                            p.StartInfo = new ProcessStartInfo()
+                            {
+                                WorkingDirectory = Directory.GetCurrentDirectory(),
+                                FileName = "ping",
+                                Arguments = "-t " + ip.IpAddress + " -w " + timeoutPing.ToString(),
+                                UseShellExecute = true,
+                                RedirectStandardOutput = false,
+                                RedirectStandardError = false,
+                                CreateNoWindow = false
+                            };
+
+                            p.Start();
+                        }
+                    }
+                }
+                else
+                {
+                    if (selected != null)
+                    {
+                        Process p = new Process();
+
+                        p.StartInfo = new ProcessStartInfo()
+                        {
+                            WorkingDirectory = Directory.GetCurrentDirectory(),
+                            FileName = "ping",
+                            Arguments = "-t " + selected.IpAddress + " -w " + timeoutPing.ToString(),
+                            UseShellExecute = true,
+                            RedirectStandardOutput = false,
+                            RedirectStandardError = false,
+                            CreateNoWindow = false
+                        };
+
+                        p.Start();
+                    }
+                }
+            }
+            catch (Exception error)
+            {
+                Console.WriteLine(error);
+            }
+        }
+
+        private void ButtonWeb0_Main_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (applyToAll)
+                {
+                    foreach(IPEntry ip in ListDevices)
+                    {
+                        if (ip.StatusPing.IndexOf("OK") != -1)
+                        {
+                            Process p = new Process();
+
+                            p.StartInfo = new ProcessStartInfo()
+                            {
+                                WorkingDirectory = Directory.GetCurrentDirectory(),
+                                FileName = TextBoxPathBrowser.Text,
+                                Arguments = ApplyMacros(TextBoxPathBrowser_Arg0.Text, ip),
+                                UseShellExecute = true,
+                                RedirectStandardOutput = false,
+                                RedirectStandardError = false,
+                                CreateNoWindow = false
+                            };
+
+                            p.Start();
+                        }
+                    }
+                }
+                else
                 {
                     Process p = new Process();
 
                     p.StartInfo = new ProcessStartInfo()
                     {
                         WorkingDirectory = Directory.GetCurrentDirectory(),
-                        FileName = "ping",
-                        Arguments = "-t " + selected.IpAddress + " -w " + timeoutPing.ToString(),
+                        FileName = TextBoxPathBrowser.Text,
+                        Arguments = ApplyMacros(TextBoxPathBrowser_Arg0.Text, selected),
                         UseShellExecute = true,
                         RedirectStandardOutput = false,
                         RedirectStandardError = false,
@@ -1069,60 +1147,35 @@ namespace Client_PING
             }
         }
 
-        private void ButtonWeb0_Main_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                Process p = new Process();
-
-                p.StartInfo = new ProcessStartInfo()
-                {
-                    WorkingDirectory = Directory.GetCurrentDirectory(),
-                    FileName = TextBoxPathBrowser.Text,
-                    Arguments = ApplyMacros(TextBoxPathBrowser_Arg0.Text),
-                    UseShellExecute = true,
-                    RedirectStandardOutput = false,
-                    RedirectStandardError = false,
-                    CreateNoWindow = false
-                };
-
-                p.Start();
-            }
-            catch (Exception error)
-            {
-                Console.WriteLine(error);
-            }
-        }
-
-        public string ApplyMacros(string input_)
+        public string ApplyMacros(string input_, IPEntry ip)
         {
             string output_ = input_;
 
-            if (selected != null) 
+            if (ip != null) 
             {
-                if(selected.CustomArg1 != null)
-                    output_ = output_.Replace("<CustomArg1>", selected.CustomArg1);
+                if(ip.CustomArg1 != null)
+                    output_ = output_.Replace("<CustomArg1>", ip.CustomArg1);
 
-                if (selected.CustomArg2 != null)
-                    output_ = output_.Replace("<CustomArg2>", selected.CustomArg2);
+                if (ip.CustomArg2 != null)
+                    output_ = output_.Replace("<CustomArg2>", ip.CustomArg2);
 
-                if (selected.CustomArg3 != null)
-                    output_ = output_.Replace("<CustomArg3>", selected.CustomArg3);
+                if (ip.CustomArg3 != null)
+                    output_ = output_.Replace("<CustomArg3>", ip.CustomArg3);
 
-                if (selected.Device != null)
-                    output_ = output_.Replace("<Device>", selected.Device);
+                if (ip.Device != null)
+                    output_ = output_.Replace("<Device>", ip.Device);
 
-                if (selected.IpAddress != null)
-                    output_ = output_.Replace("<IpAddress>", selected.IpAddress);
+                if (ip.IpAddress != null)
+                    output_ = output_.Replace("<IpAddress>", ip.IpAddress);
 
-                if (selected.User != null)
-                    output_ = output_.Replace("<User>", selected.User);
+                if (ip.User != null)
+                    output_ = output_.Replace("<User>", ip.User);
 
-                if (selected.Pass != null)
-                    output_ = output_.Replace("<Pass>", selected.Pass);
+                if (ip.Pass != null)
+                    output_ = output_.Replace("<Pass>", ip.Pass);
 
-                if (selected.MacAddress != null)
-                    output_ = output_.Replace("<MacAddress>", selected.MacAddress);
+                if (ip.MacAddress != null)
+                    output_ = output_.Replace("<MacAddress>", ip.MacAddress);
             }
 
             return output_;
@@ -1819,20 +1872,46 @@ namespace Client_PING
         {
             try
             {
-                Process p = new Process();
-
-                p.StartInfo = new ProcessStartInfo()
+                if (applyToAll)
                 {
-                    WorkingDirectory = Directory.GetCurrentDirectory(),
-                    FileName = paths[offset, 0],
-                    Arguments = ApplyMacros(args[offset, 0]),
-                    UseShellExecute = true,
-                    RedirectStandardOutput = false,
-                    RedirectStandardError = false,
-                    CreateNoWindow = false
-                };
+                    foreach(IPEntry ip in ListDevices)
+                    {
+                        if (ip.StatusPing.IndexOf("OK") != -1)
+                        {
+                            Process p = new Process();
 
-                p.Start();
+                            p.StartInfo = new ProcessStartInfo()
+                            {
+                                WorkingDirectory = Directory.GetCurrentDirectory(),
+                                FileName = paths[offset, 0],
+                                Arguments = ApplyMacros(args[offset, 0], ip),
+                                UseShellExecute = true,
+                                RedirectStandardOutput = false,
+                                RedirectStandardError = false,
+                                CreateNoWindow = false
+                            };
+
+                            p.Start();
+                        }
+                    }
+                }
+                else
+                {
+                    Process p = new Process();
+
+                    p.StartInfo = new ProcessStartInfo()
+                    {
+                        WorkingDirectory = Directory.GetCurrentDirectory(),
+                        FileName = paths[offset, 0],
+                        Arguments = ApplyMacros(args[offset, 0], selected),
+                        UseShellExecute = true,
+                        RedirectStandardOutput = false,
+                        RedirectStandardError = false,
+                        CreateNoWindow = false
+                    };
+
+                    p.Start();
+                }
             }
             catch (Exception error)
             {
@@ -1844,20 +1923,46 @@ namespace Client_PING
         {
             try
             {
-                Process p = new Process();
-
-                p.StartInfo = new ProcessStartInfo()
+                if (applyToAll)
                 {
-                    WorkingDirectory = Directory.GetCurrentDirectory(),
-                    FileName = paths[offset, 1],
-                    Arguments = ApplyMacros(args[offset, 1]),
-                    UseShellExecute = true,
-                    RedirectStandardOutput = false,
-                    RedirectStandardError = false,
-                    CreateNoWindow = false
-                };
+                    foreach(IPEntry ip in ListDevices)
+                    {
+                        if (ip.StatusPing.IndexOf("OK") != -1)
+                        {
+                            Process p = new Process();
 
-                p.Start();
+                            p.StartInfo = new ProcessStartInfo()
+                            {
+                                WorkingDirectory = Directory.GetCurrentDirectory(),
+                                FileName = paths[offset, 1],
+                                Arguments = ApplyMacros(args[offset, 1], ip),
+                                UseShellExecute = true,
+                                RedirectStandardOutput = false,
+                                RedirectStandardError = false,
+                                CreateNoWindow = false
+                            };
+
+                            p.Start();
+                        }
+                    }
+                }
+                else
+                {
+                    Process p = new Process();
+
+                    p.StartInfo = new ProcessStartInfo()
+                    {
+                        WorkingDirectory = Directory.GetCurrentDirectory(),
+                        FileName = paths[offset, 1],
+                        Arguments = ApplyMacros(args[offset, 1], selected),
+                        UseShellExecute = true,
+                        RedirectStandardOutput = false,
+                        RedirectStandardError = false,
+                        CreateNoWindow = false
+                    };
+
+                    p.Start();
+                }
             }
             catch (Exception error)
             {
@@ -1869,20 +1974,46 @@ namespace Client_PING
         {
             try
             {
-                Process p = new Process();
-
-                p.StartInfo = new ProcessStartInfo()
+                if (applyToAll)
                 {
-                    WorkingDirectory = Directory.GetCurrentDirectory(),
-                    FileName = paths[offset, 2],
-                    Arguments = ApplyMacros(args[offset, 2]),
-                    UseShellExecute = true,
-                    RedirectStandardOutput = false,
-                    RedirectStandardError = false,
-                    CreateNoWindow = false
-                };
+                    foreach(IPEntry ip in ListDevices)
+                    {
+                        if (ip.StatusPing.IndexOf("OK") != -1)
+                        {
+                            Process p = new Process();
 
-                p.Start();
+                            p.StartInfo = new ProcessStartInfo()
+                            {
+                                WorkingDirectory = Directory.GetCurrentDirectory(),
+                                FileName = paths[offset, 2],
+                                Arguments = ApplyMacros(args[offset, 2], ip),
+                                UseShellExecute = true,
+                                RedirectStandardOutput = false,
+                                RedirectStandardError = false,
+                                CreateNoWindow = false
+                            };
+
+                            p.Start();
+                        }
+                    }
+                }
+                else
+                {
+                    Process p = new Process();
+
+                    p.StartInfo = new ProcessStartInfo()
+                    {
+                        WorkingDirectory = Directory.GetCurrentDirectory(),
+                        FileName = paths[offset, 2],
+                        Arguments = ApplyMacros(args[offset, 2], selected),
+                        UseShellExecute = true,
+                        RedirectStandardOutput = false,
+                        RedirectStandardError = false,
+                        CreateNoWindow = false
+                    };
+
+                    p.Start();
+                }
             }
             catch (Exception error)
             {
@@ -1894,20 +2025,46 @@ namespace Client_PING
         {
             try
             {
-                Process p = new Process();
-
-                p.StartInfo = new ProcessStartInfo()
+                if (applyToAll)
                 {
-                    WorkingDirectory = Directory.GetCurrentDirectory(),
-                    FileName = paths[offset, 3],
-                    Arguments = ApplyMacros(args[offset, 3]),
-                    UseShellExecute = true,
-                    RedirectStandardOutput = false,
-                    RedirectStandardError = false,
-                    CreateNoWindow = false
-                };
+                    foreach(IPEntry ip in ListDevices)
+                    {
+                        if (ip.StatusPing.IndexOf("OK") != -1)
+                        {
+                            Process p = new Process();
 
-                p.Start();
+                            p.StartInfo = new ProcessStartInfo()
+                            {
+                                WorkingDirectory = Directory.GetCurrentDirectory(),
+                                FileName = paths[offset, 3],
+                                Arguments = ApplyMacros(args[offset, 3], ip),
+                                UseShellExecute = true,
+                                RedirectStandardOutput = false,
+                                RedirectStandardError = false,
+                                CreateNoWindow = false
+                            };
+
+                            p.Start();
+                        }
+                    }
+                }
+                else
+                {
+                    Process p = new Process();
+
+                    p.StartInfo = new ProcessStartInfo()
+                    {
+                        WorkingDirectory = Directory.GetCurrentDirectory(),
+                        FileName = paths[offset, 3],
+                        Arguments = ApplyMacros(args[offset, 3], selected),
+                        UseShellExecute = true,
+                        RedirectStandardOutput = false,
+                        RedirectStandardError = false,
+                        CreateNoWindow = false
+                    };
+
+                    p.Start();
+                }
             }
             catch (Exception error)
             {
@@ -1919,20 +2076,46 @@ namespace Client_PING
         {
             try
             {
-                Process p = new Process();
-
-                p.StartInfo = new ProcessStartInfo()
+                if (applyToAll)
                 {
-                    WorkingDirectory = Directory.GetCurrentDirectory(),
-                    FileName = paths[offset, 4],
-                    Arguments = ApplyMacros(args[offset, 4]),
-                    UseShellExecute = true,
-                    RedirectStandardOutput = false,
-                    RedirectStandardError = false,
-                    CreateNoWindow = false
-                };
+                    foreach(IPEntry ip in ListDevices)
+                    {
+                        if (ip.StatusPing.IndexOf("OK") != -1)
+                        {
+                            Process p = new Process();
 
-                p.Start();
+                            p.StartInfo = new ProcessStartInfo()
+                            {
+                                WorkingDirectory = Directory.GetCurrentDirectory(),
+                                FileName = paths[offset, 4],
+                                Arguments = ApplyMacros(args[offset, 4], ip),
+                                UseShellExecute = true,
+                                RedirectStandardOutput = false,
+                                RedirectStandardError = false,
+                                CreateNoWindow = false
+                            };
+
+                            p.Start();
+                        }
+                    }
+                }
+                else
+                {
+                    Process p = new Process();
+
+                    p.StartInfo = new ProcessStartInfo()
+                    {
+                        WorkingDirectory = Directory.GetCurrentDirectory(),
+                        FileName = paths[offset, 4],
+                        Arguments = ApplyMacros(args[offset, 4], selected),
+                        UseShellExecute = true,
+                        RedirectStandardOutput = false,
+                        RedirectStandardError = false,
+                        CreateNoWindow = false
+                    };
+
+                    p.Start();
+                }
             }
             catch (Exception error)
             {
@@ -1944,20 +2127,46 @@ namespace Client_PING
         {
             try
             {
-                Process p = new Process();
-
-                p.StartInfo = new ProcessStartInfo()
+                if (applyToAll)
                 {
-                    WorkingDirectory = Directory.GetCurrentDirectory(),
-                    FileName = paths[offset, 5],
-                    Arguments = ApplyMacros(args[offset, 5]),
-                    UseShellExecute = true,
-                    RedirectStandardOutput = false,
-                    RedirectStandardError = false,
-                    CreateNoWindow = false
-                };
+                    foreach(IPEntry ip in ListDevices)
+                    {
+                        if (ip.StatusPing.IndexOf("OK") != -1)
+                        {
+                            Process p = new Process();
 
-                p.Start();
+                            p.StartInfo = new ProcessStartInfo()
+                            {
+                                WorkingDirectory = Directory.GetCurrentDirectory(),
+                                FileName = paths[offset, 5],
+                                Arguments = ApplyMacros(args[offset, 5], ip),
+                                UseShellExecute = true,
+                                RedirectStandardOutput = false,
+                                RedirectStandardError = false,
+                                CreateNoWindow = false
+                            };
+
+                            p.Start();
+                        }
+                    }
+                }
+                else
+                {
+                    Process p = new Process();
+
+                    p.StartInfo = new ProcessStartInfo()
+                    {
+                        WorkingDirectory = Directory.GetCurrentDirectory(),
+                        FileName = paths[offset, 5],
+                        Arguments = ApplyMacros(args[offset, 5], selected),
+                        UseShellExecute = true,
+                        RedirectStandardOutput = false,
+                        RedirectStandardError = false,
+                        CreateNoWindow = false
+                    };
+
+                    p.Start();
+                }
             }
             catch (Exception error)
             {
@@ -1969,20 +2178,46 @@ namespace Client_PING
         {
             try
             {
-                Process p = new Process();
-
-                p.StartInfo = new ProcessStartInfo()
+                if (applyToAll)
                 {
-                    WorkingDirectory = Directory.GetCurrentDirectory(),
-                    FileName = paths[offset, 6],
-                    Arguments = ApplyMacros(args[offset, 6]),
-                    UseShellExecute = true,
-                    RedirectStandardOutput = false,
-                    RedirectStandardError = false,
-                    CreateNoWindow = false
-                };
+                    foreach (IPEntry ip in ListDevices)
+                    {
+                        if (ip.StatusPing.IndexOf("OK") != -1)
+                        {
+                            Process p = new Process();
 
-                p.Start();
+                            p.StartInfo = new ProcessStartInfo()
+                            {
+                                WorkingDirectory = Directory.GetCurrentDirectory(),
+                                FileName = paths[offset, 6],
+                                Arguments = ApplyMacros(args[offset, 6], ip),
+                                UseShellExecute = true,
+                                RedirectStandardOutput = false,
+                                RedirectStandardError = false,
+                                CreateNoWindow = false
+                            };
+
+                            p.Start();
+                        }
+                    }
+                }
+                else
+                {
+                    Process p = new Process();
+
+                    p.StartInfo = new ProcessStartInfo()
+                    {
+                        WorkingDirectory = Directory.GetCurrentDirectory(),
+                        FileName = paths[offset, 6],
+                        Arguments = ApplyMacros(args[offset, 6], selected),
+                        UseShellExecute = true,
+                        RedirectStandardOutput = false,
+                        RedirectStandardError = false,
+                        CreateNoWindow = false
+                    };
+
+                    p.Start();
+                }
             }
             catch (Exception error)
             {
@@ -1994,20 +2229,46 @@ namespace Client_PING
         {
             try
             {
-                Process p = new Process();
-
-                p.StartInfo = new ProcessStartInfo()
+                if (applyToAll)
                 {
-                    WorkingDirectory = Directory.GetCurrentDirectory(),
-                    FileName = paths[offset, 7],
-                    Arguments = ApplyMacros(args[offset, 7]),
-                    UseShellExecute = true,
-                    RedirectStandardOutput = false,
-                    RedirectStandardError = false,
-                    CreateNoWindow = false
-                };
+                    foreach(IPEntry ip in ListDevices)
+                    {
+                        if (ip.StatusPing.IndexOf("OK") != -1)
+                        {
+                            Process p = new Process();
 
-                p.Start();
+                            p.StartInfo = new ProcessStartInfo()
+                            {
+                                WorkingDirectory = Directory.GetCurrentDirectory(),
+                                FileName = paths[offset, 7],
+                                Arguments = ApplyMacros(args[offset, 7], ip),
+                                UseShellExecute = true,
+                                RedirectStandardOutput = false,
+                                RedirectStandardError = false,
+                                CreateNoWindow = false
+                            };
+
+                            p.Start();
+                        }
+                    }
+                }
+                else
+                {
+                    Process p = new Process();
+
+                    p.StartInfo = new ProcessStartInfo()
+                    {
+                        WorkingDirectory = Directory.GetCurrentDirectory(),
+                        FileName = paths[offset, 7],
+                        Arguments = ApplyMacros(args[offset, 7], selected),
+                        UseShellExecute = true,
+                        RedirectStandardOutput = false,
+                        RedirectStandardError = false,
+                        CreateNoWindow = false
+                    };
+
+                    p.Start();
+                }
             }
             catch (Exception error)
             {
@@ -2671,6 +2932,7 @@ namespace Client_PING
 
             CheckBoxUseThreadsForPing.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
             CheckBoxPinWIndow.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
+            CheckBoxApplyToAll.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
             LabelCurrentIp.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
 
             //ComboBoxProfileSelected.Foreground = (bool)CheckBoxDarkMode.IsChecked ? ForeGroundDark : ForeGroundLight;
@@ -2996,6 +3258,16 @@ namespace Client_PING
         {
             License window = new License();
             window.Show();
+        }
+
+        private void CheckBoxUseThreadsForPing_Checked_1(object sender, RoutedEventArgs e)
+        {
+            useThreadsForPing = (bool)CheckBoxUseThreadsForPing.IsChecked;
+        }
+
+        private void CheckBoxApplyToAll_Checked(object sender, RoutedEventArgs e)
+        {
+            applyToAll = (bool)CheckBoxApplyToAll.IsChecked;
         }
     }
     public class File_IP_Config

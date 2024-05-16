@@ -47,7 +47,7 @@ namespace Client_PING
 
         private void LabelLinkRepository_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://github.com/Fedex1515");
+            System.Diagnostics.Process.Start("https://github.com/fedeturco");
         }
     }
 }

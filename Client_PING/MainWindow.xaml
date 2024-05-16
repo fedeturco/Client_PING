@@ -597,7 +597,7 @@
                     </Button>
 
                     <Label x:Name="LabelCurrentIp" Content="" Margin="229,0,435,4" VerticalAlignment="Bottom"/>
-                    <CheckBox x:Name="CheckBoxUseThreadsForPing" Content="Parallel pings" HorizontalAlignment="Left" Margin="10,0,0,37" VerticalAlignment="Bottom" Checked="CheckBoxUseThreadsForPing_Checked" Unchecked="CheckBoxUseThreadsForPing_Checked"/>
+                    <CheckBox x:Name="CheckBoxUseThreadsForPing" Content="Parallel pings" HorizontalAlignment="Left" Margin="10,0,0,37" VerticalAlignment="Bottom" Checked="CheckBoxUseThreadsForPing_Checked_1" Unchecked="CheckBoxUseThreadsForPing_Checked_1"/>
                     <Button x:Name="ButtonWeb7_Main" HorizontalAlignment="Right" Margin="0,0,95,7" VerticalAlignment="Bottom" Width="80" Click="ButtonWeb7_Main_Click" ToolTip="Ctrl+7">
                         <StackPanel Orientation="Horizontal">
                             <Image x:Name="ButtonWeb7_Main_Image" Margin="0,0,5,0" Width="15" Height="15" Stretch="None"/>
@@ -610,6 +610,7 @@
                             <TextBlock x:Name="ButtonWeb8_Main_Text"><Run Text="App"/><Run Text="8"/></TextBlock>
                         </StackPanel>
                     </Button>
+                    <CheckBox x:Name="CheckBoxApplyToAll" Content="Open all connected" Margin="229,0,0,35" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="149" FontSize="14" Checked="CheckBoxApplyToAll_Checked" Unchecked="CheckBoxApplyToAll_Checked"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Selected IP" FontSize="14">

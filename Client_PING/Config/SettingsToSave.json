@@ -64,7 +64,8 @@
       "CheckBoxPinWIndow": "",
       "CheckBoxUseThreadsForPing": "",
       "CheckBoxWindowMaximized": "",
-      "CheckBoxDarkMode": ""
+      "CheckBoxDarkMode": "",
+      "CheckBoxApplyToAll": ""
     },
     "menuItems": {
       "ViewStatusPing": "",
